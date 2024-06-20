@@ -70,3 +70,11 @@ CREATE TABLE Roommates (
     FOREIGN KEY (UserID) REFERENCES Users(UserID) ON DELETE CASCADE,
     FOREIGN KEY (ApartmentID) REFERENCES Apartments(ApartmentID) ON DELETE CASCADE
 );
+
+CREATE TABLE apartment_images (
+    ImageID INT AUTO_INCREMENT PRIMARY KEY,
+    ApartmentID INT,
+    ImageURL VARCHAR(255),
+    FOREIGN KEY (ApartmentID) REFERENCES apartments(ApartmentId)
+);
+

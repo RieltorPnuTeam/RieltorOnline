@@ -16,6 +16,10 @@ class User(db.Model):
     RegistrationDate = db.Column(db.TIMESTAMP, server_default=db.func.current_timestamp(), nullable=False)
     UserImage = db.Column(db.String(255))
 
+    comments_written = db.relationship('UserComment', foreign_keys='UserComment.AuthorID', backref='author', lazy=True)
+    comments_received = db.relationship('UserComment', foreign_keys='UserComment.TargetUserID', backref='target_user',
+                                        lazy=True)
+
 
 class Apartment(db.Model):
     __tablename__ = 'apartments'
@@ -41,6 +45,7 @@ class Apartment(db.Model):
     LastUpdated = db.Column(db.TIMESTAMP, server_default=db.func.current_timestamp(),
                             onupdate=db.func.current_timestamp(), nullable=False)
     FavoriteCount = db.Column(db.Integer, default=0)
+
     Images = db.relationship('ApartmentImage', backref='apartment', lazy=True)
 
 
@@ -50,3 +55,14 @@ class ApartmentImage(db.Model):
     ImageID = db.Column(db.Integer, primary_key=True)
     ApartmentID = db.Column(db.Integer, db.ForeignKey('apartments.ApartmentId'), nullable=False)
     ImageURL = db.Column(db.String(255), nullable=False)
+
+
+class UserComment(db.Model):
+    __tablename__ = 'usercomments'
+
+    CommentID = db.Column(db.Integer, primary_key=True)
+    AuthorID = db.Column(db.Integer, db.ForeignKey('users.UserID'), nullable=False)
+    TargetUserID = db.Column(db.Integer, db.ForeignKey('users.UserID'), nullable=False)
+    Content = db.Column(db.Text, nullable=False)
+    Rating = db.Column(db.Integer, nullable=False)
+    DateAdded = db.Column(db.TIMESTAMP, server_default=db.func.current_timestamp(), nullable=False)
