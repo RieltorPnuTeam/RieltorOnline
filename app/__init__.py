@@ -18,10 +18,14 @@ def create_app():
         from .models import User
         db.create_all()
 
+    # API registration
     from app.routes import bp
     app.register_blueprint(bp)
 
-    from app.api import api_bp
-    app.register_blueprint(api_bp)
+    from app.API.users_api import users_api_bp
+    app.register_blueprint(users_api_bp)
+
+    from app.API.apartments_api import apartments_api_bp
+    app.register_blueprint(apartments_api_bp)
 
     return app

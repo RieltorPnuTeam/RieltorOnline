@@ -1,10 +1,10 @@
-# app/api.py
+# app/users_api.py
 
 from flask import Blueprint, jsonify, request, abort
 from app.models import User, Apartment
 from app import db
 
-api_bp = Blueprint('api', __name__, url_prefix='/api')
+users_api_bp = Blueprint('users_api', __name__, url_prefix='/api')
 
 
 def serialize_user(user):
@@ -19,19 +19,19 @@ def serialize_user(user):
     }
 
 
-@api_bp.route('/users', methods=['GET'])
+@users_api_bp.route('/users', methods=['GET'])
 def get_users():
     users = User.query.all()
     return jsonify([serialize_user(user) for user in users]), 200
 
 
-@api_bp.route('/users/<int:user_id>', methods=['GET'])
+@users_api_bp.route('/users/<int:user_id>', methods=['GET'])
 def get_user(user_id):
     user = User.query.get_or_404(user_id)
     return jsonify(serialize_user(user)), 200
 
 
-@api_bp.route('/users', methods=['POST'])
+@users_api_bp.route('/users', methods=['POST'])
 def create_user():
     data = request.json
     new_user = User(
@@ -47,7 +47,7 @@ def create_user():
     return jsonify({'message': 'User created successfully', 'UserID': new_user.UserID}), 201
 
 
-@api_bp.route('/users/<int:user_id>', methods=['PUT'])
+@users_api_bp.route('/users/<int:user_id>', methods=['PUT'])
 def update_user(user_id):
     user = User.query.get_or_404(user_id)
     data = request.json
@@ -63,7 +63,7 @@ def update_user(user_id):
     return jsonify({'message': 'User updated successfully', 'UserID': user.UserID}), 200
 
 
-@api_bp.route('/users/<int:user_id>', methods=['DELETE'])
+@users_api_bp.route('/users/<int:user_id>', methods=['DELETE'])
 def delete_user(user_id):
     user = User.query.get_or_404(user_id)
     db.session.delete(user)
