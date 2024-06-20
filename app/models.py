@@ -92,3 +92,13 @@ class Favorite(db.Model):
     user = db.relationship('User', backref=db.backref('favorites', lazy='dynamic'))
     apartment = db.relationship('Apartment', backref=db.backref('favorites', lazy='dynamic'))
 
+
+class Roommate(db.Model):
+    __tablename__ = 'roommates'
+
+    RoommateID = db.Column(db.Integer, primary_key=True)
+    UserID = db.Column(db.Integer, db.ForeignKey('users.UserID'), nullable=False)
+    ApartmentID = db.Column(db.Integer, db.ForeignKey('apartments.ApartmentId'), nullable=False)
+
+    User = db.relationship('User', backref=db.backref('roommates', cascade='all, delete-orphan'))
+    Apartment = db.relationship('Apartment', backref=db.backref('roommates', cascade='all, delete-orphan'))

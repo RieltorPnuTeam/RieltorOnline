@@ -40,4 +40,7 @@ def create_app():
     from app.API.favorites_api import favorites_api_bp
     app.register_blueprint(favorites_api_bp)
 
+    from app.API.roommates_api import roommates_api_bp
+    app.register_blueprint(roommates_api_bp)
+
     return app
