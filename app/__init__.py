@@ -11,6 +11,13 @@ def create_app():
     app = Flask(__name__)
     app.config.from_object(Config)
     db.init_app(app)
-    from app import routes
-    app.register_blueprint(routes.bp)
+
+    # Реєстрація Blueprint з веб-роутами
+    from app.routes import bp
+    app.register_blueprint(bp)
+
+    # Реєстрація Blueprint з API
+    from app.api import api_bp
+    app.register_blueprint(api_bp)
+
     return app
