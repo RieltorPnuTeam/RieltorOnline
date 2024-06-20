@@ -1,4 +1,4 @@
-# app/usercomments_api.py
+# app/API/usercomments_api.py
 
 from flask import Blueprint, jsonify, request, abort
 from app.models import UserComment

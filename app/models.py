@@ -80,3 +80,15 @@ class ApartmentComment(db.Model):
 
     user = db.relationship('User', backref='apartment_comments')
     apartment = db.relationship('Apartment', backref='apartment_comments')
+
+
+class Favorite(db.Model):
+    __tablename__ = 'favorites'
+
+    FavoriteID = db.Column(db.Integer, primary_key=True)
+    UserID = db.Column(db.Integer, db.ForeignKey('users.UserID'), nullable=False)
+    ApartmentID = db.Column(db.Integer, db.ForeignKey('apartments.ApartmentId'), nullable=False)
+
+    user = db.relationship('User', backref=db.backref('favorites', lazy='dynamic'))
+    apartment = db.relationship('Apartment', backref=db.backref('favorites', lazy='dynamic'))
+

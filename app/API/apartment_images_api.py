@@ -1,4 +1,4 @@
-# app/apartment_images_api.py
+# app/API/apartment_images_api.py
 
 from flask import Blueprint, jsonify, request, abort
 from app.models import ApartmentImage
