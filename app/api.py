@@ -29,3 +29,19 @@ def get_users():
 def get_user(user_id):
     user = User.query.get_or_404(user_id)
     return jsonify(serialize_user(user)), 200
+
+
+@api_bp.route('/users', methods=['POST'])
+def create_user():
+    data = request.json
+    new_user = User(
+        Email=data['Email'],
+        Password=data['Password'],
+        IsStudent=data['IsStudent'],
+        Name=data['Name'],
+        PhoneNumber=data['PhoneNumber'],
+        UserType=data['UserType']
+    )
+    db.session.add(new_user)
+    db.session.commit()
+    return jsonify({'message': 'User created successfully', 'UserID': new_user.UserID}), 201
