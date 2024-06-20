@@ -66,3 +66,17 @@ class UserComment(db.Model):
     Content = db.Column(db.Text, nullable=False)
     Rating = db.Column(db.Integer, nullable=False)
     DateAdded = db.Column(db.TIMESTAMP, server_default=db.func.current_timestamp(), nullable=False)
+
+
+class ApartmentComment(db.Model):
+    __tablename__ = 'apartmentcomments'
+
+    CommentID = db.Column(db.Integer, primary_key=True)
+    UserID = db.Column(db.Integer, db.ForeignKey('users.UserID'), nullable=False)
+    ApartmentID = db.Column(db.Integer, db.ForeignKey('apartments.ApartmentId'), nullable=False)
+    Content = db.Column(db.Text, nullable=False)
+    Rating = db.Column(db.Integer, nullable=False)
+    DateAdded = db.Column(db.TIMESTAMP, server_default=db.func.current_timestamp(), nullable=False)
+
+    user = db.relationship('User', backref='apartment_comments')
+    apartment = db.relationship('Apartment', backref='apartment_comments')

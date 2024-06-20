@@ -34,4 +34,7 @@ def create_app():
     from app.API.usercomments_api import usercomments_api_bp
     app.register_blueprint(usercomments_api_bp)
 
+    from app.API.apartmentcomments_api import apartmentcomments_api_bp
+    app.register_blueprint(apartmentcomments_api_bp)
+
     return app
