@@ -28,4 +28,7 @@ def create_app():
     from app.API.apartments_api import apartments_api_bp
     app.register_blueprint(apartments_api_bp)
 
+    from app.API.apartment_images_api import apartment_images_api_bp
+    app.register_blueprint(apartment_images_api_bp)
+
     return app

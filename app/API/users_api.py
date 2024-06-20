@@ -15,7 +15,8 @@ def serialize_user(user):
         'Name': user.Name,
         'PhoneNumber': user.PhoneNumber,
         'UserType': user.UserType,
-        'RegistrationDate': user.RegistrationDate
+        'RegistrationDate': user.RegistrationDate,
+        'UserImage': user.UserImage
     }
 
 
@@ -40,7 +41,8 @@ def create_user():
         IsStudent=data['IsStudent'],
         Name=data['Name'],
         PhoneNumber=data['PhoneNumber'],
-        UserType=data['UserType']
+        UserType=data['UserType'],
+        UserImage=data.get('UserImage', None)
     )
     db.session.add(new_user)
     db.session.commit()
@@ -58,6 +60,7 @@ def update_user(user_id):
     user.Name = data.get('Name', user.Name)
     user.PhoneNumber = data.get('PhoneNumber', user.PhoneNumber)
     user.UserType = data.get('UserType', user.UserType)
+    user.UserImage = data.get('UserImage', None)
 
     db.session.commit()
     return jsonify({'message': 'User updated successfully', 'UserID': user.UserID}), 200

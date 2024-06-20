@@ -1,7 +1,7 @@
 # app/apartments_api.py
 
 from flask import Blueprint, jsonify, request, abort
-from app.models import User, Apartment
+from app.models import Apartment, ApartmentImage
 from app import db
 
 apartments_api_bp = Blueprint('apartments_api', __name__, url_prefix='/api')
@@ -28,7 +28,8 @@ def serialize_apartment(apartment):
         'IsRented': apartment.IsRented,
         'CreationDate': apartment.CreationDate,
         'LastUpdated': apartment.LastUpdated,
-        'FavoriteCount': apartment.FavoriteCount
+        'FavoriteCount': apartment.FavoriteCount,
+        'Images': [img.ImageURL for img in apartment.Images]
     }
 
 
@@ -68,6 +69,16 @@ def create_apartment():
     )
     db.session.add(new_apartment)
     db.session.commit()
+
+    images = data.get('Images', [])
+    for image_url in images:
+        new_image = ApartmentImage(
+            ApartmentID=new_apartment.ApartmentId,
+            ImageURL=image_url
+        )
+        db.session.add(new_image)
+    db.session.commit()
+
     return jsonify({'message': 'Apartment created', 'ApartmentId': new_apartment.ApartmentId}), 201
 
 
@@ -93,12 +104,25 @@ def update_apartment(apartment_id):
     apartment.IsRented = data.get('IsRented', apartment.IsRented)
     apartment.FavoriteCount = data.get('FavoriteCount', apartment.FavoriteCount)
     db.session.commit()
+
+    images = data.get('Images', [])
+    ApartmentImage.query.filter_by(ApartmentID=apartment.ApartmentId).delete()
+    for image_url in images:
+        new_image = ApartmentImage(
+            ApartmentID=apartment.ApartmentId,
+            ImageURL=image_url
+        )
+        db.session.add(new_image)
+
+    db.session.commit()
+
     return jsonify({'message': 'Apartment updated'}), 200
 
 
 @apartments_api_bp.route('/apartments/<int:apartment_id>', methods=['DELETE'])
 def delete_apartment(apartment_id):
     apartment = Apartment.query.get_or_404(apartment_id)
+    ApartmentImage.query.filter_by(ApartmentId=apartment_id).delete()
     db.session.delete(apartment)
     db.session.commit()
     return jsonify({'message': 'Apartment deleted'}), 200

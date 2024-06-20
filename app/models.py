@@ -14,6 +14,7 @@ class User(db.Model):
     PhoneNumber = db.Column(db.String(20))
     UserType = db.Column(db.Enum('орендар', 'власник'), nullable=False)
     RegistrationDate = db.Column(db.TIMESTAMP, server_default=db.func.current_timestamp(), nullable=False)
+    UserImage = db.Column(db.String(255))
 
 
 class Apartment(db.Model):
@@ -38,5 +39,14 @@ class Apartment(db.Model):
     IsRented = db.Column(db.Enum('вільна', 'зайнята', 'відкрита для співмешканців'), nullable=False)
     CreationDate = db.Column(db.TIMESTAMP, server_default=db.func.current_timestamp(), nullable=False)
     LastUpdated = db.Column(db.TIMESTAMP, server_default=db.func.current_timestamp(),
-                             onupdate=db.func.current_timestamp(), nullable=False)
+                            onupdate=db.func.current_timestamp(), nullable=False)
     FavoriteCount = db.Column(db.Integer, default=0)
+    Images = db.relationship('ApartmentImage', backref='apartment', lazy=True)
+
+
+class ApartmentImage(db.Model):
+    __tablename__ = 'apartment_images'
+
+    ImageID = db.Column(db.Integer, primary_key=True)
+    ApartmentID = db.Column(db.Integer, db.ForeignKey('apartments.ApartmentId'), nullable=False)
+    ImageURL = db.Column(db.String(255), nullable=False)
