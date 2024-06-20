@@ -45,3 +45,27 @@ def create_user():
     db.session.add(new_user)
     db.session.commit()
     return jsonify({'message': 'User created successfully', 'UserID': new_user.UserID}), 201
+
+
+@api_bp.route('/users/<int:user_id>', methods=['PUT'])
+def update_user(user_id):
+    user = User.query.get_or_404(user_id)
+    data = request.json
+
+    user.Email = data.get('Email', user.Email)
+    user.Password = data.get('Password', user.Password)
+    user.IsStudent = data.get('IsStudent', user.IsStudent)
+    user.Name = data.get('Name', user.Name)
+    user.PhoneNumber = data.get('PhoneNumber', user.PhoneNumber)
+    user.UserType = data.get('UserType', user.UserType)
+
+    db.session.commit()
+    return jsonify({'message': 'User updated successfully', 'UserID': user.UserID}), 200
+
+
+@api_bp.route('/users/<int:user_id>', methods=['DELETE'])
+def delete_user(user_id):
+    user = User.query.get_or_404(user_id)
+    db.session.delete(user)
+    db.session.commit()
+    return jsonify({'message': 'User deleted successfully', 'UserID': user.UserID}), 200
