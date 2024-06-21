@@ -1,9 +1,16 @@
 # app/models.py
+import os
 
-from app import db, bcrypt
+from PIL import Image
+from flask import current_app
+
+from app import db, bcrypt, login_manager, app
+from flask_login import UserMixin
+
+base_path = os.path.join(current_app.root_path, '..', '..', 'static', 'profile_pic')
 
 
-class User(db.Model):
+class User(UserMixin, db.Model):
     __tablename__ = 'users'
 
     UserID = db.Column(db.Integer, primary_key=True)
@@ -19,6 +26,8 @@ class User(db.Model):
     comments_written = db.relationship('UserComment', foreign_keys='UserComment.AuthorID', backref='author', lazy=True)
     comments_received = db.relationship('UserComment', foreign_keys='UserComment.TargetUserID', backref='target_user',
                                         lazy=True)
+    liked_apartments = db.relationship('Apartment', secondary='favorites',
+                                       backref=db.backref('liked_by_users', lazy='dynamic'))
 
     def __init__(self, Email, Password, IsStudent, Name, UserType, PhoneNumber=None, UserImage=None):
         self.Email = Email
@@ -34,6 +43,27 @@ class User(db.Model):
 
     def check_password(self, password):
         return bcrypt.check_password_hash(self.Password, password)
+
+    def get_id(self):
+        return str(self.UserID)
+
+    def save_profile_pic(self, profile_image):
+        picture_fn = f'{self.UserID}.png'
+        picture_path = os.path.join(current_app.root_path, 'static/profile_pic', picture_fn)
+
+        output_size = (250, 250)
+        img = Image.open(profile_image)
+        img.thumbnail(output_size)
+        img.save(picture_path)
+
+        self.UserImage = picture_fn
+
+    def set_password(self, password):
+        self.Password = bcrypt.generate_password_hash(password).decode('utf-8')
+
+    @login_manager.user_loader
+    def load_user(user_id):
+        return User.query.get(int(user_id))
 
 
 class Apartment(db.Model):
@@ -61,7 +91,7 @@ class Apartment(db.Model):
                             onupdate=db.func.current_timestamp(), nullable=False)
     FavoriteCount = db.Column(db.Integer, default=0)
 
-    Images = db.relationship('ApartmentImage', backref='apartment', lazy=True)
+    images = db.relationship('ApartmentImage', backref='apartment', lazy=True)
 
 
 class ApartmentImage(db.Model):

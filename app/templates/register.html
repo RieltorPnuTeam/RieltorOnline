@@ -1,0 +1,34 @@
+{% block content %}
+<h1>Register</h1>
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }}">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+            <form method="POST" action="{{ url_for('main.register') }}">
+                {{ form.hidden_tag() }}
+                <div class="form-group">
+                    {{ form.email.label }} {{ form.email(class="form-control") }}
+                </div>
+                <div class="form-group">
+                    {{ form.password.label }} {{ form.password(class="form-control") }}
+                </div>
+                <div class="form-group">
+                    {{ form.confirm_password.label }} {{ form.confirm_password(class="form-control") }}
+                </div>
+                <div class="form-group">
+                    {{ form.name.label }} {{ form.name(class="form-control") }}
+                </div>
+                <div class="form-group">
+                    {{ form.phone_number.label }} {{ form.phone_number(class="form-control") }}
+                </div>
+                <div class="form-group">
+                    {{ form.user_type.label }} {{ form.user_type(class="form-control") }}
+                </div>
+                <button type="submit" class="btn btn-primary">Register</button>
+            </form>
+
+{% endblock %}
