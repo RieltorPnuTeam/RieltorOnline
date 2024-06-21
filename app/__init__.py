@@ -4,8 +4,10 @@ from flask import Flask
 from flask_migrate import Migrate
 from config import Config
 from flask_sqlalchemy import SQLAlchemy
+from flask_bcrypt import Bcrypt
 
 db = SQLAlchemy()
+bcrypt = Bcrypt()
 
 
 def create_app():
@@ -13,6 +15,7 @@ def create_app():
     app.config.from_object(Config)
 
     db.init_app(app)
+    bcrypt.init_app(app)
 
     with app.app_context():
         from .models import User

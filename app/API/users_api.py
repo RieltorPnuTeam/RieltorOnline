@@ -2,7 +2,7 @@
 
 from flask import Blueprint, jsonify, request, abort
 from app.models import User, Apartment
-from app import db
+from app import db, bcrypt
 
 users_api_bp = Blueprint('users_api', __name__, url_prefix='/api')
 
@@ -29,6 +29,7 @@ def get_users():
 @users_api_bp.route('/users/<int:user_id>', methods=['GET'])
 def get_user(user_id):
     user = User.query.get_or_404(user_id)
+    print(user.check_password('password123'))
     return jsonify(serialize_user(user)), 200
 
 

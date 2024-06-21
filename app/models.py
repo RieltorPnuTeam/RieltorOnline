@@ -1,6 +1,6 @@
 # app/models.py
 
-from app import db
+from app import db, bcrypt
 
 
 class User(db.Model):
@@ -19,6 +19,21 @@ class User(db.Model):
     comments_written = db.relationship('UserComment', foreign_keys='UserComment.AuthorID', backref='author', lazy=True)
     comments_received = db.relationship('UserComment', foreign_keys='UserComment.TargetUserID', backref='target_user',
                                         lazy=True)
+
+    def __init__(self, Email, Password, IsStudent, Name, PhoneNumber=None, UserType=None, UserImage=None):
+        self.Email = Email
+        self.Password = bcrypt.generate_password_hash(Password).decode('utf-8')
+        self.IsStudent = IsStudent
+        self.Name = Name
+        self.PhoneNumber = PhoneNumber
+        self.UserType = UserType
+        self.UserImage = UserImage
+
+    def __repr__(self):
+        return f"<User {self.Email}>"
+
+    def check_password(self, password):
+        return bcrypt.check_password_hash(self.Password, password)
 
 
 class Apartment(db.Model):
