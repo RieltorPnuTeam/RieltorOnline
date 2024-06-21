@@ -2,6 +2,7 @@
 
 from flask import Blueprint, jsonify, request, abort
 from app.models import ApartmentComment, db
+from flask_jwt_extended import jwt_required
 
 apartmentcomments_api_bp = Blueprint('apartmentcomments_api', __name__, url_prefix='/api')
 
@@ -18,18 +19,21 @@ def serialize_apartment_comment(comment):
 
 
 @apartmentcomments_api_bp.route('/apartmentcomments', methods=['GET'])
+@jwt_required()
 def get_apartment_comments():
     comments = ApartmentComment.query.all()
     return jsonify([serialize_apartment_comment(comment) for comment in comments]), 200
 
 
 @apartmentcomments_api_bp.route('/apartmentcomments/<int:comment_id>', methods=['GET'])
+@jwt_required()
 def get_apartment_comment(comment_id):
     comment = ApartmentComment.query.get_or_404(comment_id)
     return jsonify(serialize_apartment_comment(comment)), 200
 
 
 @apartmentcomments_api_bp.route('/apartmentcomments', methods=['POST'])
+@jwt_required()
 def create_apartment_comment():
     data = request.get_json()
     new_comment = ApartmentComment(
@@ -44,6 +48,7 @@ def create_apartment_comment():
 
 
 @apartmentcomments_api_bp.route('/apartmentcomments/<int:comment_id>', methods=['PUT'])
+@jwt_required()
 def update_apartment_comment(comment_id):
     data = request.get_json()
     comment = ApartmentComment.query.get_or_404(comment_id)
@@ -54,6 +59,7 @@ def update_apartment_comment(comment_id):
 
 
 @apartmentcomments_api_bp.route('/apartmentcomments/<int:comment_id>', methods=['DELETE'])
+@jwt_required()
 def delete_apartment_comment(comment_id):
     comment = ApartmentComment.query.get_or_404(comment_id)
     db.session.delete(comment)

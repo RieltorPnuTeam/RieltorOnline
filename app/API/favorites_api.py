@@ -1,6 +1,7 @@
 # app/API/favorites_api.py
 
 from flask import Blueprint, jsonify, request, abort
+from flask_jwt_extended import jwt_required
 from app.models import Favorite, User, Apartment
 from app import db
 
@@ -16,18 +17,21 @@ def serialize_favorite(favorite):
 
 
 @favorites_api_bp.route('/favorites', methods=['GET'])
+@jwt_required()
 def get_favorites():
     favorites = Favorite.query.all()
     return jsonify([serialize_favorite(favorite) for favorite in favorites]), 200
 
 
 @favorites_api_bp.route('/favorites/<int:favorite_id>', methods=['GET'])
+@jwt_required()
 def get_favorite(favorite_id):
     favorite = Favorite.query.get_or_404(favorite_id)
     return jsonify(serialize_favorite(favorite)), 200
 
 
 @favorites_api_bp.route('/favorites', methods=['POST'])
+@jwt_required()
 def create_favorite():
     data = request.get_json()
 
@@ -46,6 +50,7 @@ def create_favorite():
 
 
 @favorites_api_bp.route('/favorites/<int:favorite_id>', methods=['DELETE'])
+@jwt_required()
 def delete_favorite(favorite_id):
     favorite = Favorite.query.get_or_404(favorite_id)
     db.session.delete(favorite)

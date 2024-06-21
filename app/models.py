@@ -12,7 +12,7 @@ class User(db.Model):
     IsStudent = db.Column(db.Boolean, nullable=False)
     Name = db.Column(db.String(255), nullable=False)
     PhoneNumber = db.Column(db.String(20))
-    UserType = db.Column(db.Enum('орендар', 'власник'), nullable=False)
+    UserType = db.Column(db.Enum('орендар', 'власник', 'admin'), nullable=False)
     RegistrationDate = db.Column(db.TIMESTAMP, server_default=db.func.current_timestamp(), nullable=False)
     UserImage = db.Column(db.String(255))
 
@@ -20,7 +20,7 @@ class User(db.Model):
     comments_received = db.relationship('UserComment', foreign_keys='UserComment.TargetUserID', backref='target_user',
                                         lazy=True)
 
-    def __init__(self, Email, Password, IsStudent, Name, PhoneNumber=None, UserType=None, UserImage=None):
+    def __init__(self, Email, Password, IsStudent, Name, UserType, PhoneNumber=None, UserImage=None):
         self.Email = Email
         self.Password = bcrypt.generate_password_hash(Password).decode('utf-8')
         self.IsStudent = IsStudent

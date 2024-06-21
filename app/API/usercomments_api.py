@@ -1,6 +1,7 @@
 # app/API/usercomments_api.py
 
 from flask import Blueprint, jsonify, request, abort
+from flask_jwt_extended import jwt_required
 from app.models import UserComment
 from app import db
 
@@ -19,18 +20,21 @@ def serialize_user_comment(comment):
 
 
 @usercomments_api_bp.route('/usercomments', methods=['GET'])
+@jwt_required()
 def get_comments():
     comments = UserComment.query.all()
     return jsonify([serialize_user_comment(comment) for comment in comments]), 200
 
 
 @usercomments_api_bp.route('/usercomments/<int:comment_id>', methods=['GET'])
+@jwt_required()
 def get_comment(comment_id):
     comment = UserComment.query.get_or_404(comment_id)
     return jsonify(serialize_user_comment(comment)), 200
 
 
 @usercomments_api_bp.route('/usercomments', methods=['POST'])
+@jwt_required()
 def create_comment():
     data = request.get_json()
     new_comment = UserComment(
@@ -45,6 +49,7 @@ def create_comment():
 
 
 @usercomments_api_bp.route('/usercomments/<int:comment_id>', methods=['PUT'])
+@jwt_required()
 def update_comment(comment_id):
     data = request.get_json()
     comment = UserComment.query.get_or_404(comment_id)
@@ -55,6 +60,7 @@ def update_comment(comment_id):
 
 
 @usercomments_api_bp.route('/usercomments/<int:comment_id>', methods=['DELETE'])
+@jwt_required()
 def delete_comment(comment_id):
     comment = UserComment.query.get_or_404(comment_id)
     db.session.delete(comment)

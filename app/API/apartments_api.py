@@ -1,6 +1,7 @@
 # app/API/apartments_api.py
 
 from flask import Blueprint, jsonify, request, abort
+from flask_jwt_extended import jwt_required
 from app.models import Apartment, ApartmentImage
 from app import db
 
@@ -34,18 +35,21 @@ def serialize_apartment(apartment):
 
 
 @apartments_api_bp.route('/apartments', methods=['GET'])
+@jwt_required()
 def get_apartments():
     apartments = Apartment.query.all()
     return jsonify([serialize_apartment(apartment) for apartment in apartments]), 200
 
 
 @apartments_api_bp.route('/apartments/<int:apartment_id>', methods=['GET'])
+@jwt_required()
 def get_apartment(apartment_id):
     apartment = Apartment.query.get_or_404(apartment_id)
     return jsonify(serialize_apartment(apartment)), 200
 
 
 @apartments_api_bp.route('/apartments', methods=['POST'])
+@jwt_required()
 def create_apartment():
     data = request.get_json()
     new_apartment = Apartment(
@@ -83,6 +87,7 @@ def create_apartment():
 
 
 @apartments_api_bp.route('/apartments/<int:apartment_id>', methods=['PUT'])
+@jwt_required()
 def update_apartment(apartment_id):
     data = request.get_json()
     apartment = Apartment.query.get_or_404(apartment_id)
@@ -120,9 +125,10 @@ def update_apartment(apartment_id):
 
 
 @apartments_api_bp.route('/apartments/<int:apartment_id>', methods=['DELETE'])
+@jwt_required()
 def delete_apartment(apartment_id):
     apartment = Apartment.query.get_or_404(apartment_id)
-    ApartmentImage.query.filter_by(ApartmentId=apartment_id).delete()
+    ApartmentImage.query.filter_by(ApartmentID=apartment_id).delete()
     db.session.delete(apartment)
     db.session.commit()
     return jsonify({'message': 'Apartment deleted'}), 200

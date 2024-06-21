@@ -1,13 +1,14 @@
 # app/__init__.py
 
 from flask import Flask
-from flask_migrate import Migrate
 from config import Config
 from flask_sqlalchemy import SQLAlchemy
 from flask_bcrypt import Bcrypt
+from flask_jwt_extended import JWTManager
 
 db = SQLAlchemy()
 bcrypt = Bcrypt()
+jwt = JWTManager()
 
 
 def create_app():
@@ -16,6 +17,7 @@ def create_app():
 
     db.init_app(app)
     bcrypt.init_app(app)
+    jwt.init_app(app)
 
     with app.app_context():
         from .models import User

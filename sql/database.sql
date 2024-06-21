@@ -5,7 +5,7 @@ CREATE TABLE Users (
     IsStudent BOOLEAN NOT NULL,
     Name VARCHAR(255) NOT NULL,
     PhoneNumber VARCHAR(20),
-    UserType ENUM('орендар', 'власник') NOT NULL,
+    UserType ENUM('орендар', 'власник', 'admin') NOT NULL,
     RegistrationDate TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 

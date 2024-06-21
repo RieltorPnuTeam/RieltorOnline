@@ -1,6 +1,7 @@
 # app/API/apartment_images_api.py
 
 from flask import Blueprint, jsonify, request, abort
+from flask_jwt_extended import jwt_required
 from app.models import ApartmentImage
 from app import db
 
@@ -16,6 +17,7 @@ def serialize_apartment_image(image):
 
 
 @apartment_images_api_bp.route('/apartment_images', methods=['POST'])
+@jwt_required()
 def create_apartment_image():
     data = request.get_json()
     new_image = ApartmentImage(
@@ -28,6 +30,7 @@ def create_apartment_image():
 
 
 @apartment_images_api_bp.route('/apartment_images/<int:image_id>', methods=['PUT'])
+@jwt_required()
 def update_apartment_image(image_id):
     data = request.get_json()
     image = ApartmentImage.query.get_or_404(image_id)
@@ -37,6 +40,7 @@ def update_apartment_image(image_id):
 
 
 @apartment_images_api_bp.route('/apartment_images/<int:image_id>', methods=['DELETE'])
+@jwt_required()
 def delete_apartment_image(image_id):
     image = ApartmentImage.query.get_or_404(image_id)
     db.session.delete(image)
@@ -45,6 +49,7 @@ def delete_apartment_image(image_id):
 
 
 @apartment_images_api_bp.route('/apartment_images/<int:apartment_id>', methods=['GET'])
+@jwt_required()
 def get_apartment_images(apartment_id):
     images = ApartmentImage.query.filter_by(ApartmentID=apartment_id).all()
     return jsonify([serialize_apartment_image(image) for image in images]), 200
