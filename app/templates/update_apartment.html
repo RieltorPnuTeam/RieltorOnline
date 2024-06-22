@@ -1,0 +1,163 @@
+{% block content %}
+<div class="container">
+    <h1>Edit Apartment</h1>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+    {% for category, message in messages %}
+    <div class="alert alert-{{ category }}">{{ message }}</div>
+    {% endfor %}
+    {% endif %}
+    {% endwith %}
+    <form method="POST" action="{{ url_for('apartment.edit_apartment', apartment_id=apartment.ApartmentId) }}" enctype="multipart/form-data">
+        {{ form.hidden_tag() }}
+
+        <div class="form-group">
+            {{ form.type.label(class="form-control-label") }}
+            {{ form.type(class="form-control") }}
+            {% for error in form.type.errors %}
+                <span class="text-danger">{{ error }}</span>
+            {% endfor %}
+        </div>
+
+        <div class="form-group">
+            {{ form.city.label(class="form-control-label") }}
+            {{ form.city(class="form-control") }}
+            {% for error in form.city.errors %}
+                <span class="text-danger">{{ error }}</span>
+            {% endfor %}
+        </div>
+
+        <div class="form-group">
+            {{ form.street.label(class="form-control-label") }}
+            {{ form.street(class="form-control") }}
+            {% for error in form.street.errors %}
+                <span class="text-danger">{{ error }}</span>
+            {% endfor %}
+        </div>
+
+        <div class="form-group">
+            {{ form.house_num.label(class="form-control-label") }}
+            {{ form.house_num(class="form-control") }}
+            {% for error in form.house_num.errors %}
+                <span class="text-danger">{{ error }}</span>
+            {% endfor %}
+        </div>
+
+        <div class="form-group">
+            {{ form.flat_num.label(class="form-control-label") }}
+            {{ form.flat_num(class="form-control") }}
+            {% for error in form.flat_num.errors %}
+                <span class="text-danger">{{ error }}</span>
+            {% endfor %}
+        </div>
+
+        <div class="form-group">
+            {{ form.price.label(class="form-control-label") }}
+            {{ form.price(class="form-control") }}
+            {% for error in form.price.errors %}
+                <span class="text-danger">{{ error }}</span>
+            {% endfor %}
+        </div>
+
+        <div class="form-group">
+            {{ form.room_count.label(class="form-control-label") }}
+            {{ form.room_count(class="form-control") }}
+            {% for error in form.room_count.errors %}
+                <span class="text-danger">{{ error }}</span>
+            {% endfor %}
+        </div>
+
+        <div class="form-group">
+            {{ form.description.label(class="form-control-label") }}
+            {{ form.description(class="form-control") }}
+            {% for error in form.description.errors %}
+                <span class="text-danger">{{ error }}</span>
+            {% endfor %}
+        </div>
+
+        <div class="form-group">
+            {{ form.comfort.label(class="form-control-label") }}
+            {{ form.comfort(class="form-control") }}
+            {% for error in form.comfort.errors %}
+                <span class="text-danger">{{ error }}</span>
+            {% endfor %}
+        </div>
+
+        <div class="form-group">
+            {{ form.infrastructure.label(class="form-control-label") }}
+            {{ form.infrastructure(class="form-control") }}
+            {% for error in form.infrastructure.errors %}
+                <span class="text-danger">{{ error }}</span>
+            {% endfor %}
+        </div>
+
+        <div class="form-group">
+            {{ form.renovation.label(class="form-control-label") }}
+            {{ form.renovation(class="form-control") }}
+            {% for error in form.renovation.errors %}
+                <span class="text-danger">{{ error }}</span>
+            {% endfor %}
+        </div>
+
+        <div class="form-group">
+            {{ form.appliances.label(class="form-control-label") }}
+            {{ form.appliances(class="form-control") }}
+            {% for error in form.appliances.errors %}
+                <span class="text-danger">{{ error }}</span>
+            {% endfor %}
+        </div>
+
+        <div class="form-group">
+            {{ form.max_residents.label(class="form-control-label") }}
+            {{ form.max_residents(class="form-control") }}
+            {% for error in form.max_residents.errors %}
+                <span class="text-danger">{{ error }}</span>
+            {% endfor %}
+        </div>
+
+        <div class="form-group">
+            {{ form.current_residents.label(class="form-control-label") }}
+            {{ form.current_residents(class="form-control") }}
+            {% for error in form.current_residents.errors %}
+                <span class="text-danger">{{ error }}</span>
+            {% endfor %}
+        </div>
+
+        <div class="form-group">
+            {{ form.is_rented.label(class="form-control-label") }}
+            {{ form.is_rented(class="form-control") }}
+            {% for error in form.is_rented.errors %}
+                <span class="text-danger">{{ error }}</span>
+            {% endfor %}
+        </div>
+
+        <div class="form-group">
+            <label for="current_images">Current Images:</label>
+            <ul>
+                {% for image in apartment.apartment_images %}
+                <li>
+                    <img src="{{ url_for('static', filename='apartment_pic/' + image.ImageURL.split('/')[-1]) }}" alt="Apartment Image" style="width: 100px;">
+                    <input type="checkbox" name="deleted_images" value="{{ image.ImageID }}"> Delete
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+
+        <div class="form-group">
+            {{ form.images.label(class="form-control-label") }}
+            {{ form.images(class="form-control-file", multiple="multiple") }}
+            {% for error in form.images.errors %}
+                <span class="text-danger">{{ error }}</span>
+            {% endfor %}
+            <small class="form-text text-muted">Upload additional images (optional).</small>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Update</button>
+    </form>
+
+    <form method="POST" action="{{ url_for('apartment.delete_apartment', apartment_id=apartment.ApartmentId) }}">
+        {{ form.csrf_token }}
+        <button type="submit" class="btn btn-danger">Delete Apartment</button>
+    </form>
+</div>
+{% endblock %}

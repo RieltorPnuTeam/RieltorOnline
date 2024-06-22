@@ -29,6 +29,9 @@ def create_app():
     from app.routes.main import main_bp
     app.register_blueprint(main_bp)
 
+    from app.routes.apartments import apartment_bp
+    app.register_blueprint(apartment_bp)
+
     # API registration
     from app.API.users_api import users_api_bp
     app.register_blueprint(users_api_bp)

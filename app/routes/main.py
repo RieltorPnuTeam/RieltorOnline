@@ -1,3 +1,5 @@
+# app/routes/main
+
 from flask import Blueprint, render_template, redirect, url_for, flash, request
 from flask_login import login_user, current_user, logout_user, login_required
 from app import db, bcrypt, app
@@ -18,6 +20,11 @@ def register():
         return redirect(url_for('main.index'))
     form = RegistrationForm()
     if form.validate_on_submit():
+        existing_user = User.query.filter_by(Email=form.email.data).first()
+        if existing_user:
+            flash('Email address already exists. Please use a different email.', 'danger')
+            return redirect(url_for('main.register'))
+
         student_domains = ['knu.ua', 'nung.edu.ua', 'ukd.edu.ua', 'nure.ua', 'chnu.edu.ua', 'lpnu.ua', 'ucu.edu.ua',
                            'ifnmu.edu.ua', 'pnu.edu.ua']
         is_student = any(form.email.data.endswith(domain) for domain in student_domains)
@@ -30,8 +37,13 @@ def register():
 
         flash('Your account has been created! You are now able to log in', 'success')
         return redirect(url_for('main.login'))
+    else:
+        for field, errors in form.errors.items():
+            for error in errors:
+                flash(f'Error in {getattr(form, field).label.text}: {error}', 'danger')
 
     return render_template('register.html', title='Register', form=form)
+
 
 
 @main_bp.route('/login', methods=['GET', 'POST'])

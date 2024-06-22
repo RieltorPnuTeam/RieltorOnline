@@ -1,0 +1,39 @@
+{% block content %}
+{% with messages = get_flashed_messages(with_categories=true) %}
+{% if messages %}
+{% for category, message in messages %}
+<div class="alert alert-{{ category }}">{{ message }}</div>
+{% endfor %}
+{% endif %}
+{% endwith %}
+<div class="container">
+    <h1>{{ apartment.Type }}</h1>
+    <p><strong>City:</strong> {{ apartment.City }}</p>
+    <p><strong>Street:</strong> {{ apartment.Street }}</p>
+    <p><strong>House Number:</strong> {{ apartment.HouseNum }}</p>
+    <p><strong>Flat Number:</strong> {{ apartment.FlatNum }}</p>
+    <p><strong>Price:</strong> {{ apartment.Price }}</p>
+    <p><strong>Room Count:</strong> {{ apartment.RoomCount }}</p>
+    <p><strong>Description:</strong> {{ apartment.Description }}</p>
+    <p><strong>Comfort:</strong> {{ apartment.Comfort }}</p>
+    <p><strong>Infrastructure:</strong> {{ apartment.Infrastructure }}</p>
+    <p><strong>Renovation:</strong> {{ apartment.Renovation }}</p>
+    <p><strong>Appliances:</strong> {{ apartment.Appliances }}</p>
+    <p><strong>Max Residents:</strong> {{ apartment.MaxResidents }}</p>
+    <p><strong>Current Residents:</strong> {{ apartment.CurrentResidents }}</p>
+    <p><strong>Status:</strong> {{ apartment.IsRented }}</p>
+    <div>
+        <h3>Images:</h3>
+        {% for image in apartment.images %}
+        <img src="{{ url_for('static', filename='apartment_pic/' ~ image.ImageURL) }}" alt="Apartment Image"
+             style="width:200px; height:auto;">
+        {% endfor %}
+    </div>
+    <div>
+        <h3>Owner Details:</h3>
+        <p><strong>Owner Name:</strong> {{ owner.Name }}</p>
+        <p><strong>Owner Phone Number:</strong> {{ owner.PhoneNumber }}</p>
+        <p><strong>Owner Email:</strong> {{ owner.Email }}</p>
+    </div>
+</div>
+{% endblock %}

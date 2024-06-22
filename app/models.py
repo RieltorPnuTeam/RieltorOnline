@@ -91,7 +91,8 @@ class Apartment(db.Model):
                             onupdate=db.func.current_timestamp(), nullable=False)
     FavoriteCount = db.Column(db.Integer, default=0)
 
-    images = db.relationship('ApartmentImage', backref='apartment', lazy=True)
+    images = db.relationship('ApartmentImage', back_populates='apartment',
+                             overlaps="images,images_apartment")
 
 
 class ApartmentImage(db.Model):
@@ -100,6 +101,11 @@ class ApartmentImage(db.Model):
     ImageID = db.Column(db.Integer, primary_key=True)
     ApartmentID = db.Column(db.Integer, db.ForeignKey('apartments.ApartmentId'), nullable=False)
     ImageURL = db.Column(db.String(255), nullable=False)
+
+    apartment = db.relationship('Apartment', backref='apartment_images')
+
+    def __repr__(self):
+        return f"<ApartmentImage(apartment_id={self.ApartmentID}, image_url='{self.ImageURL}')>"
 
 
 class UserComment(db.Model):

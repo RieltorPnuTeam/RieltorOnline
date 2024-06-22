@@ -1,5 +1,3 @@
-<!-- profile.html -->
-
 {% block content %}
 <div class="container">
     <h1>Edit Profile</h1>
@@ -35,7 +33,6 @@
 
     <hr>
 
-    <!-- Інформація про користувача -->
     <div class="row">
         <div class="col-md-4">
             {% if current_user.UserImage %}
@@ -56,7 +53,6 @@
 
     <hr>
 
-    <!-- Коментарі про користувача -->
     <h2>Comments</h2>
     <div class="comments">
         {% for comment in comments_received %}
@@ -73,7 +69,6 @@
 
     <hr>
 
-    <!-- Вподобані квартири -->
     <h2>Liked Apartments</h2>
     <div class="liked-apartments">
         <div class="row">
