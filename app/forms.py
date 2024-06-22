@@ -25,8 +25,7 @@ class RegistrationForm(FlaskForm):
     ])
     phone_number = StringField('Phone Number', validators=[
         DataRequired(),
-        Regexp(r'^(\+\d{1,3})?\d{10,}$',
-               message='Invalid phone number format. Use digits only, optionally starting with + and followed by at least 10 digits')
+        Regexp(r'^\+\d{12}$', message='Invalid phone number format. Use digits only, optionally starting with + and followed by at least 10 digits')
     ])
     user_type = SelectField('User Type', choices=[('орендар', 'Орендар'), ('власник', 'Власник')],
                             validators=[DataRequired()])
@@ -40,14 +39,23 @@ class LoginForm(FlaskForm):
 
 
 class EditProfileForm(FlaskForm):
-    name = StringField('Name', validators=[DataRequired()])
+    name = StringField('Name', validators=[
+        Optional(),
+        Regexp('^[A-Z][a-z]*\s[A-Z][a-z]*$',
+               message='Name must contain at least two words, each starting with a capital letter')
+    ])
     phone_number = StringField('Phone Number', validators=[
         Optional(),
-        Regexp(r'^(\+\d{1,3})?\d{10,}$', message='Invalid phone number format. Use digits only, optionally starting with + and followed by at least 10 digits')
+        Regexp(r'^\+\d{12}$', message='Invalid phone number format. Use digits only, optionally starting with + and followed by at least 10 digits')
     ])
     user_type = SelectField('User Type', choices=[('орендар', 'Орендар'), ('власник', 'Власник')],
                             validators=[DataRequired()])
-    password = PasswordField('New Password', validators=[Optional(), Length(min=6)])
+    password = PasswordField('Password', validators=[
+        Optional(),
+        Length(min=6),
+        Regexp('^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,}$',
+               message='Password must contain at least one letter and one number')
+    ])
     profile_image = FileField('Profile Image', validators=[FileAllowed(['jpg', 'png'])])
     confirm_password = PasswordField('Confirm Password',
                                      validators=[EqualTo('password', message='Passwords must match')])
