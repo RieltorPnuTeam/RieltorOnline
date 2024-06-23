@@ -1,75 +1,162 @@
+{% extends "base.html" %}
+
+{% block title %}Житло{% endblock %}
+
 {% block content %}
-  <h1>Профіль користувача: {{ user.Name }}</h1>
 
-  <div>
-    <p>Електронна пошта: {{ user.Email }}</p>
-    <p>Номер телефону: {{ user.PhoneNumber or 'Not provided' }}</p>
-    <p>Тип користувача: {{ user.UserType }}</p>
 
-    {% if user.UserImage %}
-      <img src="{{ url_for('static', filename='profile_pic/' + user.UserImage) }}" alt="Profile Image" class="profile-image">
-    {% else %}
-      <p>No profile image available.</p>
+<style>
+    body {
+        font-family: 'Times New Roman', sans-serif;
+        background-color: cornsilk;
+    }
+
+    .container {
+        background-color: #fff;
+        padding: 20px;
+        border-radius: 15px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        margin-top: 30px;
+    }
+
+    .card {
+        border: none;
+        border-radius: 10px;
+        overflow: hidden;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        margin-bottom: 20px;
+    }
+
+    .card-body {
+        padding: 20px;
+    }
+
+    .card-img-top {
+        height: 200px;
+        object-fit: cover;
+    }
+
+    .btn-primary {
+        background-color: #007bff;
+        color: white;
+    }
+
+    .img-fluid {
+        width: 150px;
+        height: 150px;
+        object-fit: cover;
+    }
+
+    .comment, .liked-apartments {
+        margin-bottom: 20px;
+    }
+</style>
+
+<div class="container">
+    <h1>Профіль користувача</h1>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+    {% for category, message in messages %}
+    <div class="alert alert-{{ category }}">{{ message }}</div>
+    {% endfor %}
     {% endif %}
+    {% endwith %}
 
-      <h2>Оголошення користувача</h2>
-    {% if user.apartments|length > 0 %}
-      <ul>
-        {% for apartment in user.apartments %}
-          <li>
-            <h1>{{ apartment.Type }} в місті {{ apartment.City }}, на вулиці {{ apartment.Street }}</h1>
-            <p>Місто: {{ apartment.City }}</p>
-            <p>Вулиця: {{ apartment.Street }}</p>
-            <p>Номер будинку: {{ apartment.HouseNum }}</p>
-            <p>Ціна: {{ apartment.Price }}</p>
-            <p>Статус: {{ apartment.IsRented }}</p>
-            <p>Дата створення: {{ apartment.CreationDate.strftime('%Y-%m-%d %H:%M:%S') }}</p>
-            <p>Дата останнього оновлення: {{ apartment.LastUpdated.strftime('%Y-%m-%d %H:%M:%S') }}</p>
-            <p>Число збережених: {{ apartment.FavoriteCount }}</p>
-            {% if apartment.apartment_images|length > 0 %}
-              <img src="{{ url_for('static', filename='apartment_pic/' + apartment.apartment_images[0].ImageURL) }}" alt="Apartment Image" class="apartment-image">
+    <div class="row mb-4">
+        <div class="col-md-4 text-center">
+            {% if user.UserImage %}
+            <img src="{{ url_for('static', filename='profile_pic/' + user.UserImage) }}"
+                 class="img-fluid rounded-circle" alt="Profile Image">
             {% else %}
-              <p>Фото відсутні</p>
+            <img src="{{ url_for('static', filename='profile_pic/default.jpg') }}" class="img-fluid rounded-circle"
+                 alt="Profile Image">
             {% endif %}
-          </li>
-        {% endfor %}
-      </ul>
-    {% else %}
-      <p>Оголошення відсутні</p>
-    {% endif %}
+        </div>
+        <div class="col-md-8">
+            <h3>{{ user.Name }}</h3>
+            <p><strong>Електронна пошта:</strong> {{ user.Email }}</p>
+            <p><strong>Номер телефону:</strong> {{ user.PhoneNumber}}</p>
+            <p><strong>Тип користувача:</strong> {{ user.UserType }}</p>
+            <p><strong>Статус студента:</strong> {{ user.IsStudent }}</p>
+        </div>
+    </div>
 
+    <hr>
+    <h2>Оголошення користувача</h2>
+    <br>
+    <div class="liked-apartments">
+        <div class="row">
+            {% if user.apartments|length > 0 %}
+            {% for apartment in user.apartments %}
+            <div class="col-md-4 mb-4">
+                <div class="card h-100">
+                    {% if apartment.apartment_images|length > 0 %}
+                    <img src="{{ url_for('static', filename='apartment_pic/' + apartment.apartment_images[0].ImageURL) }}"
+                         class="card-img-top" alt="Apartment Image">
+                    {% else %}
+                    <img src="{{ url_for('static', filename='apartment_pic/default.jpg') }}" class="card-img-top"
+                         alt="Apartment Image">
+                    {% endif %}
+                    <div class="card-body">
+                        <h5 class="card-title">{{ apartment.Type }} в місті {{ apartment.City }}</h5>
+                        <p class="card-text"><strong>Вулиця:</strong> {{ apartment.Street }}</p>
+                        <p class="card-text"><strong>Номер будинку:</strong> {{ apartment.HouseNum }}</p>
+                        <p class="card-text"><strong>Ціна:</strong> {{ apartment.Price }} грн. на місяць</p>
+                        <p class="card-text"><strong>Статус:</strong> {{ apartment.IsRented }}</p>
+                        <p class="card-text"><strong>Дата створення:</strong> {{
+                            apartment.CreationDate.strftime('%Y-%m-%d %H:%M:%S') }}</p>
+                        <p class="card-text"><strong>Дата останнього оновлення:</strong> {{
+                            apartment.LastUpdated.strftime('%Y-%m-%d %H:%M:%S') }}</p>
+                        <p class="card-text"><strong>Число збережених:</strong> {{ apartment.FavoriteCount }}</p>
+                        <a href="{{ url_for('apartment.view_apartment', apartment_id=apartment.ApartmentId) }}"
+                           class="btn btn-primary">Переглянути</a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+            {% else %}
+            <p>&emsp;Оголошення відсутні</p>
+            {% endif %}
+        </div>
+    </div>
+
+    <hr>
     <h2>Коментарі</h2>
-    {% if user.comments_received|length > 0 %}
-      <ul>
+    <div class="comments">
+        {% if user.comments_received|length > 0 %}
         {% for comment in user.comments_received %}
-          <li>
-            <p>Від: {{ comment.author.Name }}</p>
-            <p>{{ comment.Content }}</p>
-            <p>Оцінка: {{ comment.Rating }}</p>
-            <p>Викладено: {{ comment.DateAdded.strftime('%Y-%m-%d %H:%M:%S') }}</p>
-          </li>
+        <div class="comment card">
+            <div class="card-body">
+                <p><strong>Від: <a href="{{ url_for('main.user_comments', user_id=comment.author.UserID) }}">{{
+                    comment.author.Name }}</a></strong></p>
+                <p>{{ comment.Content }}</p>
+                <p><strong>Оцінка:</strong> {{ comment.Rating }}</p>
+                <p><strong>Викладено:</strong> {{ comment.DateAdded.strftime('%Y-%m-%d %H:%M:%S') }}</p>
+            </div>
+        </div>
         {% endfor %}
-      </ul>
-    {% else %}
-      <p>Коментарі відсутні</p>
-    {% endif %}
+        {% else %}
+        <p>Коментарі відсутні</p>
+        {% endif %}
+    </div>
 
     {% if current_user.is_authenticated %}
-      <h2>Додати коментар</h2>
-      <form method="POST" action="{{ url_for('main.user_comments', user_id=user.UserID) }}">
+    <hr>
+    <h2>Додати коментар</h2>
+    <form method="POST" action="{{ url_for('main.user_comments', user_id=user.UserID) }}">
         {{ comment_form.hidden_tag() }}
         <div class="form-group">
-          <p>Коментар:</p>
-          {{ comment_form.Content(class="form-control", rows="3") }}
+            <label for="comment">Коментар:</label>
+            {{ comment_form.Content(class="form-control", rows="3") }}
         </div>
         <div class="form-group">
-          <p>Оцінка:</p>
-          {{ comment_form.Rating(class="form-control") }}
+            <label for="rating">Оцінка:</label>
+            {{ comment_form.Rating(class="form-control") }}
         </div>
         <button type="submit" class="btn btn-primary">Підтвердити</button>
-      </form>
+    </form>
     {% else %}
-      <p>Please <a href="{{ url_for('login') }}">log in</a> to leave a comment.</p>
+    <p>Please <a href="{{ url_for('login') }}">log in</a> to leave a comment.</p>
     {% endif %}
-  </div>
+</div>
 {% endblock %}

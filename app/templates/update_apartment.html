@@ -1,4 +1,68 @@
+{% extends "base.html" %}
+
+{% block title %}Житло{% endblock %}
+
 {% block content %}
+
+<style>
+    body {
+        font-family: 'Times New Roman', sans-serif;
+        background-color: cornsilk;
+    }
+
+    .container {
+        background-color: #fff;
+        padding: 20px;
+        border-radius: 15px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        margin-top: 30px;
+    }
+
+    .card {
+        border: none;
+        border-radius: 10px;
+        overflow: hidden;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        margin-bottom: 20px;
+    }
+
+    .card-body {
+        padding: 20px;
+    }
+
+    .card-img-top {
+        height: 200px;
+        object-fit: cover;
+    }
+
+    .btn-primary {
+        background-color: #007bff;
+        color: white;
+    }
+
+    .btn-danger {
+        background-color: #dc3545;
+        color: white;
+    }
+
+    .form-group {
+        margin-bottom: 20px;
+    }
+
+    .alert {
+        margin-top: 20px;
+    }
+
+    ul {
+        list-style: none;
+        padding: 0;
+    }
+
+    ul li {
+        margin-bottom: 10px;
+    }
+</style>
+
 <div class="container">
     <h1>Редагування оголошення</h1>
     {% with messages = get_flashed_messages(with_categories=true) %}
@@ -8,12 +72,13 @@
     {% endfor %}
     {% endif %}
     {% endwith %}
+
     <form method="POST" action="{{ url_for('apartment.edit_apartment', apartment_id=apartment.ApartmentId) }}"
           enctype="multipart/form-data">
         {{ form.hidden_tag() }}
 
         <div class="form-group">
-            <strong>Тип житла: </strong>
+            <label for="type"><strong>Тип житла:</strong></label>
             {{ form.type(class="form-control") }}
             {% for error in form.type.errors %}
             <span class="text-danger">{{ error }}</span>
@@ -21,7 +86,7 @@
         </div>
 
         <div class="form-group">
-            <strong>Місто: </strong>
+            <label for="city"><strong>Місто:</strong></label>
             {{ form.city(class="form-control") }}
             {% for error in form.city.errors %}
             <span class="text-danger">{{ error }}</span>
@@ -29,7 +94,7 @@
         </div>
 
         <div class="form-group">
-            <strong>Вулиця:</strong>
+            <label for="street"><strong>Вулиця:</strong></label>
             {{ form.street(class="form-control") }}
             {% for error in form.street.errors %}
             <span class="text-danger">{{ error }}</span>
@@ -37,7 +102,7 @@
         </div>
 
         <div class="form-group">
-            <strong>Номер будинку:</strong>
+            <label for="house_num"><strong>Номер будинку:</strong></label>
             {{ form.house_num(class="form-control") }}
             {% for error in form.house_num.errors %}
             <span class="text-danger">{{ error }}</span>
@@ -45,7 +110,7 @@
         </div>
 
         <div class="form-group">
-            <strong>Номер квартири (за наявності):</strong>
+            <label for="flat_num"><strong>Номер квартири (за наявності):</strong></label>
             {{ form.flat_num(class="form-control") }}
             {% for error in form.flat_num.errors %}
             <span class="text-danger">{{ error }}</span>
@@ -53,15 +118,15 @@
         </div>
 
         <div class="form-group">
-            <strong>Ціна:</strong>
-            {{ form.price(class="form-control") }}
+            <label for="price"><strong>Ціна:</strong></label>
+            {{ form.price(class="form-control") }} грн. на місяць
             {% for error in form.price.errors %}
             <span class="text-danger">{{ error }}</span>
             {% endfor %}
         </div>
 
         <div class="form-group">
-            <strong>Кількість кімнат:</strong>
+            <label for="room_count"><strong>Кількість кімнат:</strong></label>
             {{ form.room_count(class="form-control") }}
             {% for error in form.room_count.errors %}
             <span class="text-danger">{{ error }}</span>
@@ -69,7 +134,7 @@
         </div>
 
         <div class="form-group">
-            <strong>Опис:</strong>
+            <label for="description"><strong>Опис:</strong></label>
             {{ form.description(class="form-control") }}
             {% for error in form.description.errors %}
             <span class="text-danger">{{ error }}</span>
@@ -77,7 +142,7 @@
         </div>
 
         <div class="form-group">
-            <strong>Комфорт:</strong>
+            <label for="comfort"><strong>Комфорт:</strong></label>
             {{ form.comfort(class="form-control") }}
             {% for error in form.comfort.errors %}
             <span class="text-danger">{{ error }}</span>
@@ -85,7 +150,7 @@
         </div>
 
         <div class="form-group">
-            <strong>Інфраструктура:</strong>
+            <label for="infrastructure"><strong>Інфраструктура:</strong></label>
             {{ form.infrastructure(class="form-control") }}
             {% for error in form.infrastructure.errors %}
             <span class="text-danger">{{ error }}</span>
@@ -93,7 +158,7 @@
         </div>
 
         <div class="form-group">
-            <strong>Ремонт:</strong>
+            <label for="renovation"><strong>Ремонт:</strong></label>
             {{ form.renovation(class="form-control") }}
             {% for error in form.renovation.errors %}
             <span class="text-danger">{{ error }}</span>
@@ -101,7 +166,7 @@
         </div>
 
         <div class="form-group">
-            <strong>Побутова техніка:</strong>
+            <label for="appliances"><strong>Побутова техніка:</strong></label>
             {{ form.appliances(class="form-control") }}
             {% for error in form.appliances.errors %}
             <span class="text-danger">{{ error }}</span>
@@ -109,7 +174,7 @@
         </div>
 
         <div class="form-group">
-            <strong>Максимальна кількість жителів:</strong>
+            <label for="max_residents"><strong>Максимальна кількість жителів:</strong></label>
             {{ form.max_residents(class="form-control") }}
             {% for error in form.max_residents.errors %}
             <span class="text-danger">{{ error }}</span>
@@ -117,7 +182,7 @@
         </div>
 
         <div class="form-group">
-            <strong>Проживає тепер:</strong>
+            <label for="current_residents"><strong>Проживає тепер:</strong></label>
             {{ form.current_residents(class="form-control") }}
             {% for error in form.current_residents.errors %}
             <span class="text-danger">{{ error }}</span>
@@ -125,7 +190,7 @@
         </div>
 
         <div class="form-group">
-            <strong>Статус житла:</strong>
+            <label for="is_rented"><strong>Статус житла:</strong></label>
             {{ form.is_rented(class="form-control") }}
             {% for error in form.is_rented.errors %}
             <span class="text-danger">{{ error }}</span>
@@ -133,30 +198,30 @@
         </div>
 
         <div class="form-group">
-            <label for="current_images">Наявні фото:</label>
+            <label for="current_images"><strong>Наявні фото:</strong></label>
             <ul>
                 {% for image in apartment.apartment_images %}
                 <li>
                     <img src="{{ url_for('static', filename='apartment_pic/' + image.ImageURL.split('/')[-1]) }}"
                          alt="Apartment Image" style="width: 100px;">
-                    <input type="checkbox" name="deleted_images" value="{{ image.ImageID }}"> Delete
+                    <input type="checkbox" name="deleted_images" value="{{ image.ImageID }}"> Видалити
                 </li>
                 {% endfor %}
             </ul>
         </div>
 
         <div class="form-group">
-            <strong>Фото:</strong>
+            <label for="images"><strong>Фото:</strong></label>
             {{ form.images(class="form-control-file", multiple="multiple") }}
             {% for error in form.images.errors %}
             <span class="text-danger">{{ error }}</span>
             {% endfor %}
-            <small class="form-text text-muted">Upload additional images (optional).</small>
+            <small class="form-text text-muted">Завантажте додаткові зображення (за бажанням).</small>
         </div>
 
         <button type="submit" name="submit" class="btn btn-primary">Оновити</button>
     </form>
-
+    <br>
     <form method="POST" action="{{ url_for('apartment.delete_apartment', apartment_id=apartment.ApartmentId) }}">
         {{ form.csrf_token }}
         <button type="submit" class="btn btn-danger">Видалити оголошення</button>
@@ -189,7 +254,7 @@
         <form method="POST" action="{{ url_for('apartment.edit_apartment', apartment_id=apartment.ApartmentId) }}">
             {{ add_roommate_form.hidden_tag() }}
             <div class="form-group">
-                <strong>Введіть електронну пошту:</strong>
+                <label for="email"><strong>Введіть електронну пошту:</strong></label>
                 {{ add_roommate_form.email(class="form-control") }}
                 {% for error in add_roommate_form.email.errors %}
                 <span class="text-danger">{{ error }}</span>

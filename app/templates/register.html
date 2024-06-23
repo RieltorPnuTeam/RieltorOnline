@@ -1,42 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registration</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            font-family: Times New Roman, sans-serif;
+            background-color: cornsilk;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .registration-container {
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 400px;
+        }
+        .registration-container h1 {
+            margin-bottom: 20px;
+        }
+        .registration-rules {
+            background-color: #f8f9fa;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+        .registration-rules ul {
+            list-style-type: disc;
+            padding-left: 20px;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        .btn-primary {
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+<div class="registration-container">
 {% block content %}
-<h1>Реєстрація</h1>
-{% with messages = get_flashed_messages(with_categories=true) %}
-{% if messages %}
-{% for category, message in messages %}
-<div class="alert alert-{{ category }}">{{ message }}</div>
-{% endfor %}
-{% endif %}
-{% endwith %}
-<div class="registration-rules">
-    <ul>
-        <li>Ім'я має складатися з двох слів, кожне з яких починається з великої літери (наприклад, Микола Мельник).
-        </li>
-        <li>Номер телефону має бути вірним, починатися зі знаку "+" і містити 12 цифр (наприклад, +380123456789).
-        </li>
-        <li>Пароль має включати як букви, так і цифри.</li>
-    </ul>
-</div>
-<form method="POST" action="{{ url_for('main.register') }}">
-    {{ form.hidden_tag() }}
-    <div class="form-group">
-        <strong>Електронна пошта: </strong> {{ form.email(class="form-control") }}
+    <h1>Реєстрація</h1>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="alert alert-{{ category }}">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+    <div class="registration-rules">
+        <ul>
+            <li>Ім'я має складатися з двох слів, кожне з яких починається з великої літери (наприклад, Микола Мельник).</li>
+            <li>Номер телефону має бути вірним, починатися зі знаку "+" і містити 12 цифр (наприклад, +380123456789).</li>
+            <li>Пароль має включати як букви, так і цифри.</li>
+        </ul>
     </div>
-    <div class="form-group">
-        <strong>Пароль: </strong> {{ form.password(class="form-control") }}
-    </div>
-    <div class="form-group">
-        <strong>Підтвердження паролю:</strong> {{ form.confirm_password(class="form-control") }}
-    </div>
-    <div class="form-group">
-        <strong>Ім'я: </strong> {{ form.name(class="form-control") }}
-    </div>
-    <div class="form-group">
-        <strong>Номер телефону: </strong> {{ form.phone_number(class="form-control") }}
-    </div>
-    <div class="form-group">
-        <strong>Тип користувача: </strong> {{ form.user_type(class="form-control") }}
-    </div>
-    <button type="submit" class="btn btn-primary">Реєстрація</button>
-</form>
-
+    <form method="POST" action="{{ url_for('main.register') }}">
+        {{ form.hidden_tag() }}
+        <div class="form-group">
+            <strong>Електронна пошта: </strong> {{ form.email(class="form-control") }}
+        </div>
+        <div class="form-group">
+            <strong>Пароль: </strong> {{ form.password(class="form-control") }}
+        </div>
+        <div class="form-group">
+            <strong>Підтвердження паролю:</strong> {{ form.confirm_password(class="form-control") }}
+        </div>
+        <div class="form-group">
+            <strong>Ім'я: </strong> {{ form.name(class="form-control") }}
+        </div>
+        <div class="form-group">
+            <strong>Номер телефону: </strong> {{ form.phone_number(class="form-control") }}
+        </div>
+        <div class="form-group">
+            <strong>Тип користувача: </strong> {{ form.user_type(class="form-control") }}
+        </div>
+        <button type="submit" class="btn btn-primary">Реєстрація</button>
+    </form>
 {% endblock %}
+</div>
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

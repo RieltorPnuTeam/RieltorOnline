@@ -1,36 +1,66 @@
+{% extends "base.html" %}
+
+{% block title %}Мої оголошення{% endblock %}
+
 {% block content %}
-<div class="container">
-    <h1>Мої оголошення</h1>
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Тип житла</th>
-                <th>Місто</th>
-                <th>Вулиця</th>
-                <th>Ціна</th>
-                <th>Фото</th>
-                <th>Дії</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for apartment in apartments %}
-            <tr>
-                <td>{{ apartment.Type }}</td>
-                <td>{{ apartment.City }}</td>
-                <td>{{ apartment.Street }}</td>
-                <td>{{ apartment.Price }}</td>
-                <td>
-                    {% for image in apartment.apartment_images %}
-                    <img src="{{ url_for('static', filename='apartment_pic/' + image.ImageURL) }}" alt="Apartment Image" style="width: 100px; height: auto;">
-                    {% endfor %}
-                </td>
-                <td>
-                    <a href="{{ url_for('apartment.view_apartment', apartment_id=apartment.ApartmentId) }}" class="btn btn-info">Переглянути</a>
-                    <a href="{{ url_for('apartment.edit_apartment', apartment_id=apartment.ApartmentId) }}" class="btn btn-warning">Змінити</a>
-                </td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+<style>
+        body {
+            font-family: 'Times New Roman', sans-serif;
+            background-color: cornsilk;
+        }
+        .container {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            margin-top: 30px;
+        }
+        .card {
+            border: none;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+        .card-body {
+            padding: 20px;
+        }
+        .card-img-top {
+            height: 200px;
+            object-fit: cover;
+        }
+        .btn-primary {
+            background-color: #007bff;
+            color: white;
+        }
+    </style>
+<div class="container mt-4">
+    <div class="card">
+        <div class="card-body">
+            <h1 class="card-title text-center mb-4">Мої оголошення</h1>
+            <div class="row">
+                {% for apartment in apartments %}
+                <div class="col-md-4 mb-4">
+                    <div class="card h-100">
+                        {% if apartment.apartment_images %}
+                        <img src="{{ url_for('static', filename='apartment_pic/' + apartment.apartment_images[0].ImageURL) }}" class="card-img-top" alt="Apartment Image">
+                        {% else %}
+                        <div class="card-img-top"></div>
+                        {% endif %}
+                        <div class="card-body">
+                            <h5 class="card-title">{{ apartment.Type }} в місті {{ apartment.City }}</h5>
+                            <p class="card-text"><strong>Вулиця:</strong> {{ apartment.Street }}</p>
+                            <p class="card-text"><strong>Ціна:</strong> {{ apartment.Price }} грн. на місяць</p>
+                            <div class="d-flex justify-content-between">
+                                <a href="{{ url_for('apartment.view_apartment', apartment_id=apartment.ApartmentId) }}" class="btn btn-info">Переглянути</a>
+                                <a href="{{ url_for('apartment.edit_apartment', apartment_id=apartment.ApartmentId) }}" class="btn btn-warning">Змінити</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
 </div>
 {% endblock %}

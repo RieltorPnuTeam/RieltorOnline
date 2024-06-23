@@ -1,0 +1,88 @@
+{% extends "base.html" %}
+
+{% block title %}Головна сторінка{% endblock %}
+
+{% block content %}
+<style>
+        body {
+            font-family: Times New Roman, sans-serif;
+            background-color: cornsilk;
+        }
+        .container {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            margin-top: 30px;
+        }
+        .card {
+            border: none;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .card-body {
+            padding: 20px;
+        }
+        .card-img-top {
+            height: 200px;
+            object-fit: cover;
+        }
+        .btn-primary {
+            background-color: #007bff;
+            color: white;
+        }
+    </style>
+<div class="container mt-4">
+    <div class="card">
+        <div class="card-body">
+            <h1 class="card-title">Вітаємо вас на нашому сайті!</h1>
+            <p>Шукаєте ідеальне житло для студентських років? Ласкаво просимо на нашу платформу!</p>
+            <p>Тут ви знайдете не лише квартири, а й надзвичайний досвід життя. Наша мета - забезпечити вас квартирою, яка
+                буде відповідати вашим потребам та бюджету, незалежно від того, чи це ви тільки починаєте свій студентський
+                шлях, чи вже готові вибрати справжнє житло.</p>
+            <p>Чи можливо ви просто зупиняєтесь в місті на певний час? Також не проблема! Знайдемо вам житло та подаримо
+                незабутні емоції під час вашого перебування.</p>
+            <p class="text-muted">Студенти Прикарпатського національного університету</p>
+        </div>
+    </div>
+
+    <div class="container mt-4">
+        <div class="card">
+            <div class="card-body">
+                <h2 class="card-title">Список найбільш вподобаного житла</h2>
+                <br>
+                <div class="row">
+                    {% if current_user.is_authenticated %}
+                        {% for apartment in liked_apartments %}
+                            <div class="col-md-4 mb-3">
+                                <div class="card h-100">
+                                    {% if apartment.images and apartment.images|length > 0 %}
+                                        <img src="{{ url_for('static', filename='apartment_pic/' + apartment.images[0].ImageURL) }}"
+                                             class="card-img-top" alt="Apartment Image">
+                                    {% else %}
+                                        <div class="card-img-top"></div>
+                                    {% endif %}
+                                    <div class="card-body">
+                                        <h3>{{ apartment.Type }} в місті {{ apartment.City }}, на вулиці {{ apartment.Street }}</h3>
+                                        <p class="card-text">Ціна: {{ apartment.Price }} грн. на місяць</p>
+                                        <p class="card-text">Кількість кімнат: {{ apartment.RoomCount }}</p>
+                                        <p class="card-text">Статус житла: {{ apartment.IsRented }}</p>
+                                        <p class="card-text">Кількість збереженого: {{ apartment.FavoriteCount }}</p>
+                                        <a href="{{ url_for('apartment.view_apartment', apartment_id=apartment.ApartmentId) }}"
+                                           class="btn btn-primary">Детальніше</a>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    {% else %}
+                        <div class="col-md-12">
+                            <p>Ви не залогінені. Будь ласка, <a href="{{ url_for('login') }}">увійдіть</a></p>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

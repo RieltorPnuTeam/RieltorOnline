@@ -1,0 +1,81 @@
+{% extends "base.html" %}
+
+{% block title %}Пошук житла{% endblock %}
+
+{% block content %}
+<style>
+        body {
+            font-family: Times New Roman, sans-serif;
+            background-color: cornsilk;
+        }
+        .container {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            margin-top: 30px;
+        }
+        .card {
+            border: none;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .card-body {
+            padding: 20px;
+        }
+        .btn-primary {
+            background-color: #007bff;
+            color: white;
+        }
+    </style>
+<div class="container mt-4">
+    <div class="card">
+        <div class="card-body">
+            <h1 class="card-title">Пошук житла</h1>
+            <form action="{{ url_for('search_results') }}" method="GET">
+                <div class="form-group">
+                    <label for="city">Місто:</label>
+                    <input type="text" class="form-control" id="city" name="city" placeholder="Наприклад, Львів">
+                </div>
+                <div class="form-group">
+                    <label for="type">Тип житла:</label>
+                    <select class="form-control" id="type" name="type">
+                        <option value="Квартира">Квартира</option>
+                        <option value="Приватний будинок">Приватний будинок</option>
+                    </select>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="min_price">Мінімальна ціна:</label>
+                        <input type="number" class="form-control" id="min_price" name="min_price" placeholder="Наприклад, 3000">
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="max_price">Максимальна ціна:</label>
+                        <input type="number" class="form-control" id="max_price" name="max_price" placeholder="Наприклад, 10000">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="min_rooms">Мінімальна кількість кімнат:</label>
+                        <input type="number" class="form-control" id="min_rooms" name="min_rooms" placeholder="Наприклад, 1">
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="max_rooms">Максимальна кількість кімнат:</label>
+                        <input type="number" class="form-control" id="max_rooms" name="max_rooms" placeholder="Наприклад, 3">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="is_rented">Статус оренди:</label>
+                    <select class="form-control" id="is_rented" name="is_rented">
+                        <option value="вільна">Вільна</option>
+                        <option value="зайнята">Зайнята</option>
+                        <option value="відкрита для співмешканців">Відкрита для співмешканців</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-primary">Знайти</button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,4 +1,61 @@
+{% extends "base.html" %}
+
+{% block title %}Житло{% endblock %}
+
 {% block content %}
+<style>
+    body {
+        font-family: Times New Roman, sans-serif;
+        background-color: cornsilk;
+    }
+
+    .container {
+        background-color: #fff;
+        padding: 20px;
+        border-radius: 15px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        margin-top: 30px;
+    }
+
+    .card {
+        border: none;
+        border-radius: 10px;
+        overflow: hidden;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .card-body {
+        padding: 20px;
+    }
+
+    .btn-primary, .btn-danger {
+        color: white;
+    }
+
+    .apartment-images img {
+        width: 100%;
+        max-width: 600px;
+        height: auto;
+        margin-bottom: 15px;
+    }
+
+    .comment, .roommate {
+        padding: 15px;
+        border: 1px solid #ddd;
+        border-radius: 10px;
+        margin-bottom: 15px;
+        background-color: #f9f9f9;
+    }
+
+    .comment .comment-content, .roommate .roommate-info {
+        margin-left: 15px;
+    }
+
+    .comment .comment-date, .comment .comment-rating {
+        font-size: 0.9em;
+        color: #555;
+    }
+</style>
 {% with messages = get_flashed_messages(with_categories=true) %}
 {% if messages %}
 {% for category, message in messages %}
@@ -6,97 +63,116 @@
 {% endfor %}
 {% endif %}
 {% endwith %}
-<div class="container">
-    <h1> </h1>
-    <h1>{{ apartment.Type }} в місті {{ apartment.City }}, на вулиці {{ apartment.Street }}</h1>
-    <p><strong>Місто: </strong> {{ apartment.City }}</p>
-    <p><strong>Вулиця: </strong> {{ apartment.Street }}</p>
-    <p><strong>Номер будинку: </strong> {{ apartment.HouseNum }}</p>
-    <p><strong>Номер квартири (за наявності): </strong> {{ apartment.FlatNum }}</p>
-    <p><strong>Ціна: </strong> {{ apartment.Price }}</p>
-    <p><strong>Кількість кімнат: </strong> {{ apartment.RoomCount }}</p>
-    <p><strong>Опис: </strong> {{ apartment.Description }}</p>
-    <p><strong>Комфорт: </strong> {{ apartment.Comfort }}</p>
-    <p><strong>Інфраструктура: </strong> {{ apartment.Infrastructure }}</p>
-    <p><strong>Ремонт: </strong> {{ apartment.Renovation }}</p>
-    <p><strong>Побутова техніка: </strong> {{ apartment.Appliances }}</p>
-    <p><strong>Максимальна кількість жителів: </strong> {{ apartment.MaxResidents }}</p>
-    <p><strong>Проживає тепер: </strong> {{ apartment.CurrentResidents }}</p>
-    <p><strong>Статус житла: </strong> {{ apartment.IsRented }}</p>
-    <div>
-        <h3>Фото:</h3>
-        {% for image in apartment.images %}
-        <img src="{{ url_for('static', filename='apartment_pic/' ~ image.ImageURL) }}" alt="Apartment Image"
-             style="width:200px; height:auto;">
-        {% endfor %}
-    </div>
-    <div class="container">
-    {% if current_user.is_authenticated %}
-      {% if apartment in current_user.liked_apartments %}
-        <form method="POST" action="{{ url_for('apartment.unlike_apartment', apartment_id=apartment.ApartmentId) }}">
-          <button type="submit" class="btn btn-danger">Видалити зі збережених</button>
-        </form>
-      {% else %}
-        <form method="POST" action="{{ url_for('apartment.like_apartment', apartment_id=apartment.ApartmentId) }}">
-          <button type="submit" class="btn btn-primary">Зберегти</button>
-        </form>
-      {% endif %}
-    {% endif %}
-    <p>Кількість вподобаннь: {{ apartment.FavoriteCount }}</p>
-    </div>
-    <div>
-        <h3>Деталі власника:</h3>
-        <p><strong>Ім'я:</strong> {{ owner.Name }}</p>
-        <p><strong>Номер телефону:</strong> {{ owner.PhoneNumber }}</p>
-        <p><strong>Електронна пошта:</strong> {{ owner.Email }}</p>
-    </div>
-    <div class="container">
-    <h2>Жителі</h2>
-    {% if apartment.roommates|length > 0 %}
-      <ul>
-        {% for roommate in apartment.roommates %}
-          <li>
-            <p>Ім'я: {{ roommate.user.Name }}</p>
-            <p>Електронна пошта: {{ roommate.user.Email }}</p>
-          </li>
-        {% endfor %}
-      </ul>
-    {% else %}
-      <p>Жителі відсутні</p>
-    {% endif %}
-</div>
-    <h2>Коментарі</h2>
-    {% if comments|length > 0 %}
-    <ul>
-        {% for comment in comments %}
-        <li>
-            <p>Від: {{ comment.user.Name }}</p>
-            <p>{{ comment.Content }}</p>
-            <p>Оцінка: {{ comment.Rating }}</p>
-            <p>Викладено: {{ comment.DateAdded.strftime('%Y-%m-%d %H:%M:%S') }}</p>
-        </li>
-        {% endfor %}
-    </ul>
-    {% else %}
-    <p>Коментарі відсутні</p>
-    {% endif %}
-
-    {% if current_user.is_authenticated %}
-    <h2>Додати коментар</h2>
-    <form method="POST" action="{{ url_for('apartment.view_apartment', apartment_id=apartment.ApartmentId) }}">
-        {{ comment_form.hidden_tag() }}
-        <div class="form-group">
-            <p>Коментар:</p>
-            {{ comment_form.Content(class="form-control", rows="3") }}
+<div class="container mt-4">
+    <div class="card">
+        <div class="card-body">
+            <h1>{{ apartment.Type }} в місті {{ apartment.City }}, на вулиці {{ apartment.Street }}</h1>
+            <p><strong>Місто: </strong> {{ apartment.City }}</p>
+            <p><strong>Вулиця: </strong> {{ apartment.Street }}</p>
+            <p><strong>Номер будинку: </strong> {{ apartment.HouseNum }}</p>
+            <p><strong>Номер квартири (за наявності): </strong> {{ apartment.FlatNum }}</p>
+            <p><strong>Ціна: </strong> {{ apartment.Price }} грн. на місяць</p>
+            <p><strong>Кількість кімнат: </strong> {{ apartment.RoomCount }}</p>
+            <p><strong>Опис: </strong> {{ apartment.Description }}</p>
+            <p><strong>Комфорт: </strong> {{ apartment.Comfort }}</p>
+            <p><strong>Інфраструктура: </strong> {{ apartment.Infrastructure }}</p>
+            <p><strong>Ремонт: </strong> {{ apartment.Renovation }}</p>
+            <p><strong>Побутова техніка: </strong> {{ apartment.Appliances }}</p>
+            <p><strong>Максимальна кількість жителів: </strong> {{ apartment.MaxResidents }}</p>
+            <p><strong>Проживає тепер: </strong> {{ apartment.CurrentResidents }}</p>
+            <p><strong>Статус житла: </strong> {{ apartment.IsRented }}</p>
+            <center>
+                <div class="apartment-images">
+                    <h3>Фото:</h3>
+                    {% for image in apartment.images %}
+                    <img src="{{ url_for('static', filename='apartment_pic/' ~ image.ImageURL) }}"
+                         alt="Apartment Image">
+                    {% endfor %}
+                </div>
+                <div class="mt-3">
+                    {% if current_user.is_authenticated %}
+                    {% if apartment in current_user.liked_apartments %}
+                    <form method="POST"
+                          action="{{ url_for('apartment.unlike_apartment', apartment_id=apartment.ApartmentId) }}">
+                        <button type="submit" class="btn btn-danger">Видалити зі збережених</button>
+                    </form>
+                    {% else %}
+                    <form method="POST"
+                          action="{{ url_for('apartment.like_apartment', apartment_id=apartment.ApartmentId) }}">
+                        <button type="submit" class="btn btn-primary">Зберегти</button>
+                    </form>
+                    {% endif %}
+                    {% endif %}
+                    <p>Кількість вподобаннь: {{ apartment.FavoriteCount }}</p>
+                </div>
+            </center>
+            <div>
+                <h3>Деталі власника:</h3>
+                <p><strong>Ім'я:</strong> <a href="{{ url_for('main.user_comments', user_id=owner.UserID) }}">{{
+                    owner.Name }}</a></p>
+                <p><strong>Номер телефону:</strong> {{ owner.PhoneNumber }}</p>
+                <p><strong>Електронна пошта:</strong> {{ owner.Email }}</p>
+            </div>
+            <div>
+                <h2>Жителі</h2>
+                {% if apartment.roommates|length > 0 %}
+                <ul class="list-unstyled">
+                    {% for roommate in apartment.roommates %}
+                    <li class="roommate d-flex">
+                        <div class="roommate-info">
+                            <p><strong>Ім'я: </strong><a
+                                    href="{{ url_for('main.user_comments', user_id=roommate.UserID) }}">{{
+                                roommate.user.Name }}</a></p>
+                            <p><strong>Електронна пошта: </strong>{{ roommate.user.Email }}</p>
+                        </div>
+                    </li>
+                    {% endfor %}
+                </ul>
+                {% else %}
+                <p>Жителі відсутні</p>
+                {% endif %}
+            </div>
+            <div>
+                <h2>Коментарі</h2>
+                {% if comments|length > 0 %}
+                <ul class="list-unstyled">
+                    {% for comment in comments %}
+                    <li class="comment d-flex">
+                        <div class="comment-content">
+                            <p><strong>Від: </strong><a
+                                    href="{{ url_for('main.user_comments', user_id=comment.UserID) }}">{{
+                                comment.user.Name }}</a></p>
+                            <p>{{ comment.Content }}</p>
+                            <p class="comment-rating"><strong>Оцінка: </strong>{{ comment.Rating }}</p>
+                            <p class="comment-date"><strong>Викладено: </strong>{{ comment.DateAdded.strftime('%Y-%m-%d
+                                %H:%M:%S') }}</p>
+                        </div>
+                    </li>
+                    {% endfor %}
+                </ul>
+                {% else %}
+                <p>Коментарі відсутні</p>
+                {% endif %}
+                {% if current_user.is_authenticated %}
+                <h2>Додати коментар</h2>
+                <form method="POST"
+                      action="{{ url_for('apartment.view_apartment', apartment_id=apartment.ApartmentId) }}">
+                    {{ comment_form.hidden_tag() }}
+                    <div class="form-group">
+                        <p>Коментар:</p>
+                        {{ comment_form.Content(class="form-control", rows="3") }}
+                    </div>
+                    <div class="form-group">
+                        <p>Оцінка:</p>
+                        {{ comment_form.Rating(class="form-control") }}
+                    </div>
+                    <button type="submit" class="btn btn-primary">Підтвердити</button>
+                </form>
+                {% else %}
+                <p>Please <a href="{{ url_for('users.login') }}">log in</a> to leave a comment.</p>
+                {% endif %}
+            </div>
         </div>
-        <div class="form-group">
-            <p>Оцінка:</p>
-            {{ comment_form.Rating(class="form-control") }}
-        </div>
-        <button type="submit" class="btn btn-primary">Підтвердити</button>
-    </form>
-    {% else %}
-    <p>Please <a href="{{ url_for('users.login') }}">log in</a> to leave a comment.</p>
-    {% endif %}
+    </div>
 </div>
 {% endblock %}

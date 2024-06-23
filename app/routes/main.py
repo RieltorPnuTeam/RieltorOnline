@@ -4,14 +4,55 @@ from flask import Blueprint, render_template, redirect, url_for, flash, request
 from flask_login import login_user, current_user, logout_user, login_required
 from app import db, bcrypt, app
 from app.forms import RegistrationForm, LoginForm, EditProfileForm, CommentForm
-from app.models import User, UserComment
+from app.models import User, UserComment, Apartment
 
 main_bp = Blueprint('main', __name__)
 
 
+@main_bp.route('/search', methods=['GET'])
+def search():
+    return render_template('search.html')
+
+
+@app.route('/search_results', methods=['GET'])
+def search_results():
+    city = request.args.get('city')
+    type = request.args.get('type')
+    min_price = request.args.get('min_price')
+    max_price = request.args.get('max_price')
+    min_rooms = request.args.get('min_rooms')
+    max_rooms = request.args.get('max_rooms')
+    is_rented = request.args.get('is_rented')
+
+    query = Apartment.query
+
+    if city:
+        query = query.filter(Apartment.City.ilike(f"%{city}%"))
+    if type:
+        query = query.filter(Apartment.Type == type)
+    if min_price:
+        query = query.filter(Apartment.Price >= min_price)
+    if max_price:
+        query = query.filter(Apartment.Price <= max_price)
+    if min_rooms:
+        query = query.filter(Apartment.RoomCount >= min_rooms)
+    if max_rooms:
+        query = query.filter(Apartment.RoomCount <= max_rooms)
+    if is_rented:
+        query = query.filter(Apartment.IsRented == is_rented)
+
+    apartments = query.all()
+
+    return render_template('search_results.html', apartments=apartments)
+
+
 @main_bp.route('/')
 def index():
-    return render_template('index.html')
+    if current_user.is_authenticated:
+        liked_apartments = Apartment.query.order_by(Apartment.FavoriteCount.desc()).all()
+        return render_template('index.html', liked_apartments=liked_apartments)
+    else:
+        return redirect(url_for('main.login'))
 
 
 @main_bp.route('/register', methods=['GET', 'POST'])

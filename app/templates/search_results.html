@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+
+{% block title %}Результати пошуку{% endblock %}
+
+{% block content %}
+<style>
+        body {
+            font-family: Times New Roman, sans-serif;
+            background-color: cornsilk;
+        }
+        .container {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            margin-top: 30px;
+        }
+        .card {
+            border: none;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .card-img-top {
+            height: 200px;
+            object-fit: cover;
+        }
+        .card-body {
+            padding: 20px;
+        }
+        .btn-primary {
+            background-color: #007bff;
+            color: white;
+        }
+    </style>
+<div class="container mt-4">
+    <div class="card">
+        <div class="card-body">
+            <h1 class="card-title">Результати пошуку</h1>
+            <br>
+            <div class="row">
+                {% for apartment in apartments %}
+                <div class="col-lg-6 mb-4">
+                    <div class="card h-100">
+                        {% if apartment.images and apartment.images|length > 0 %}
+                        <img src="{{ url_for('static', filename='apartment_pic/' + apartment.images[0].ImageURL) }}"
+                             class="card-img-top" alt="Apartment Image">
+                        {% else %}
+                        <div class="card-img-top"></div>
+                        {% endif %}
+                        <div class="card-body">
+                            <h3>{{ apartment.Type }} в місті {{ apartment.City }}</h3>
+                            <p class="card-text">Ціна: {{ apartment.Price }} грн. на місяць</p>
+                            <p class="card-text">Вулиця: {{ apartment.Street }}</p>
+                            <p class="card-text">Номер будинку: {{ apartment.HouseNum }}</p>
+                            <p class="card-text">Номер квартири: {{ apartment.FlatNum }}</p>
+                            <p class="card-text">Комфорт: {{ apartment.Comfort }}</p>
+                            <p class="card-text">Ремонт: {{ apartment.Renovation }}</p>
+                            <p class="card-text">Побутова техніка: {{ apartment.Appliances }}</p>
+                            <p class="card-text">Кількість кімнат: {{ apartment.RoomCount }}</p>
+                            <p class="card-text">Проживає тепер: {{ apartment.CurrentResidents }}</p>
+                            <p class="card-text">Максимальна кількість мешканців: {{ apartment.MaxResidents }}</p>
+                            <p class="card-text"><strong>Статус: {{ apartment.IsRented }}</strong></p>
+                            <a href="{{ url_for('apartment.view_apartment', apartment_id=apartment.ApartmentId) }}"
+                               class="btn btn-primary">Детальніше</a>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

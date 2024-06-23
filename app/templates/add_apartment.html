@@ -1,147 +1,182 @@
+{% extends "base.html" %}
+
+{% block title %}Створити нове оголошення{% endblock %}
+
 {% block content %}
-<div class="container">
-    <h1>Create New Apartment</h1>
-    {% with messages = get_flashed_messages(with_categories=true) %}
-    {% if messages %}
-    {% for category, message in messages %}
-    <div class="alert alert-{{ category }}">{{ message }}</div>
-    {% endfor %}
-    {% endif %}
-    {% endwith %}
-    <form method="POST" action="{{ url_for('apartment.new_apartment') }}" enctype="multipart/form-data">
-        {{ form.hidden_tag() }}
-
-        <div class="form-group">
-            <strong>Тип житла: </strong>
-            {{ form.type(class="form-control") }}
-            {% for error in form.type.errors %}
-                <span class="text-danger">{{ error }}</span>
+<style>
+        body {
+            font-family: Times New Roman, sans-serif;
+            background-color: cornsilk;
+        }
+        .container {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            margin-top: 30px;
+        }
+        .card {
+            border: none;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .card-body {
+            padding: 20px;
+        }
+        .btn-primary {
+            background-color: #007bff;
+            color: white;
+        }
+    </style>
+<div class="container mt-4">
+    <div class="card">
+        <div class="card-body">
+            <h1>Створити нове оголошення</h1>
+            {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+            {% for category, message in messages %}
+            <div class="alert alert-{{ category }}">{{ message }}</div>
             {% endfor %}
-        </div>
+            {% endif %}
+            {% endwith %}
+            <form method="POST" action="{{ url_for('apartment.new_apartment') }}" enctype="multipart/form-data">
+                {{ form.hidden_tag() }}
 
-        <div class="form-group">
-            <strong>Місто: </strong>
-            {{ form.city(class="form-control") }}
-            {% for error in form.city.errors %}
-                <span class="text-danger">{{ error }}</span>
-            {% endfor %}
-        </div>
+                <div class="form-group">
+                    <strong>Тип житла: </strong>
+                    {{ form.type(class="form-control") }}
+                    {% for error in form.type.errors %}
+                        <span class="text-danger">{{ error }}</span>
+                    {% endfor %}
+                </div>
 
-        <div class="form-group">
-            <strong>Вулиця:</strong>
-            {{ form.street(class="form-control") }}
-            {% for error in form.street.errors %}
-                <span class="text-danger">{{ error }}</span>
-            {% endfor %}
-        </div>
+                <div class="form-group">
+                    <strong>Місто: </strong>
+                    {{ form.city(class="form-control") }}
+                    {% for error in form.city.errors %}
+                        <span class="text-danger">{{ error }}</span>
+                    {% endfor %}
+                </div>
 
-        <div class="form-group">
-            <strong>Номер будинку:</strong>
-            {{ form.house_num(class="form-control") }}
-            {% for error in form.house_num.errors %}
-                <span class="text-danger">{{ error }}</span>
-            {% endfor %}
-        </div>
+                <div class="form-group">
+                    <strong>Вулиця:</strong>
+                    {{ form.street(class="form-control") }}
+                    {% for error in form.street.errors %}
+                        <span class="text-danger">{{ error }}</span>
+                    {% endfor %}
+                </div>
 
-        <div class="form-group">
-            <strong>Номер квартири (за наявності):</strong>
-            {{ form.flat_num(class="form-control") }}
-            {% for error in form.flat_num.errors %}
-                <span class="text-danger">{{ error }}</span>
-            {% endfor %}
-        </div>
+                <div class="form-group">
+                    <strong>Номер будинку:</strong>
+                    {{ form.house_num(class="form-control") }}
+                    {% for error in form.house_num.errors %}
+                        <span class="text-danger">{{ error }}</span>
+                    {% endfor %}
+                </div>
 
-        <div class="form-group">
-            <strong>Ціна:</strong>
-            {{ form.price(class="form-control") }}
-            {% for error in form.price.errors %}
-                <span class="text-danger">{{ error }}</span>
-            {% endfor %}
-        </div>
+                <div class="form-group">
+                    <strong>Номер квартири (за наявності):</strong>
+                    {{ form.flat_num(class="form-control") }}
+                    {% for error in form.flat_num.errors %}
+                        <span class="text-danger">{{ error }}</span>
+                    {% endfor %}
+                </div>
 
-        <div class="form-group">
-            <strong>Кількість кімнат:</strong>
-            {{ form.room_count(class="form-control") }}
-            {% for error in form.room_count.errors %}
-                <span class="text-danger">{{ error }}</span>
-            {% endfor %}
-        </div>
+                <div class="form-group">
+                    <strong>Ціна:</strong>
+                    {{ form.price(class="form-control") }}
+                    грн. на місяць
+                    {% for error in form.price.errors %}
+                        <span class="text-danger">{{ error }}</span>
+                    {% endfor %}
+                </div>
 
-        <div class="form-group">
-            <strong>Опис:</strong>
-            {{ form.description(class="form-control") }}
-            {% for error in form.description.errors %}
-                <span class="text-danger">{{ error }}</span>
-            {% endfor %}
-        </div>
+                <div class="form-group">
+                    <strong>Кількість кімнат:</strong>
+                    {{ form.room_count(class="form-control") }}
+                    {% for error in form.room_count.errors %}
+                        <span class="text-danger">{{ error }}</span>
+                    {% endfor %}
+                </div>
 
-        <div class="form-group">
-            <strong>Комфорт:</strong>
-            {{ form.comfort(class="form-control") }}
-            {% for error in form.comfort.errors %}
-                <span class="text-danger">{{ error }}</span>
-            {% endfor %}
-        </div>
+                <div class="form-group">
+                    <strong>Опис:</strong>
+                    {{ form.description(class="form-control") }}
+                    {% for error in form.description.errors %}
+                        <span class="text-danger">{{ error }}</span>
+                    {% endfor %}
+                </div>
 
-        <div class="form-group">
-            <strong>Інфраструктура:</strong>
-            {{ form.infrastructure(class="form-control") }}
-            {% for error in form.infrastructure.errors %}
-                <span class="text-danger">{{ error }}</span>
-            {% endfor %}
-        </div>
+                <div class="form-group">
+                    <strong>Комфорт:</strong>
+                    {{ form.comfort(class="form-control") }}
+                    {% for error in form.comfort.errors %}
+                        <span class="text-danger">{{ error }}</span>
+                    {% endfor %}
+                </div>
 
-        <div class="form-group">
-            <strong>Ремонт:</strong>
-            {{ form.renovation(class="form-control") }}
-            {% for error in form.renovation.errors %}
-                <span class="text-danger">{{ error }}</span>
-            {% endfor %}
-        </div>
+                <div class="form-group">
+                    <strong>Інфраструктура:</strong>
+                    {{ form.infrastructure(class="form-control") }}
+                    {% for error in form.infrastructure.errors %}
+                        <span class="text-danger">{{ error }}</span>
+                    {% endfor %}
+                </div>
 
-        <div class="form-group">
-            <strong>Побутова техніка:</strong>
-            {{ form.appliances(class="form-control") }}
-            {% for error in form.appliances.errors %}
-                <span class="text-danger">{{ error }}</span>
-            {% endfor %}
-        </div>
+                <div class="form-group">
+                    <strong>Ремонт:</strong>
+                    {{ form.renovation(class="form-control") }}
+                    {% for error in form.renovation.errors %}
+                        <span class="text-danger">{{ error }}</span>
+                    {% endfor %}
+                </div>
 
-        <div class="form-group">
-            <strong>Максимальна кількість жителів:</strong>
-            {{ form.max_residents(class="form-control") }}
-            {% for error in form.max_residents.errors %}
-                <span class="text-danger">{{ error }}</span>
-            {% endfor %}
-        </div>
+                <div class="form-group">
+                    <strong>Побутова техніка:</strong>
+                    {{ form.appliances(class="form-control") }}
+                    {% for error in form.appliances.errors %}
+                        <span class="text-danger">{{ error }}</span>
+                    {% endfor %}
+                </div>
 
-        <div class="form-group">
-            <strong>Проживає тепер:</strong>
-            {{ form.current_residents(class="form-control") }}
-            {% for error in form.current_residents.errors %}
-                <span class="text-danger">{{ error }}</span>
-            {% endfor %}
-        </div>
+                <div class="form-group">
+                    <strong>Максимальна кількість жителів:</strong>
+                    {{ form.max_residents(class="form-control") }}
+                    {% for error in form.max_residents.errors %}
+                        <span class="text-danger">{{ error }}</span>
+                    {% endfor %}
+                </div>
 
-        <div class="form-group">
-            <strong>Статус житла:</strong>
-            {{ form.is_rented(class="form-control") }}
-            {% for error in form.is_rented.errors %}
-                <span class="text-danger">{{ error }}</span>
-            {% endfor %}
-        </div>
+                <div class="form-group">
+                    <strong>Проживає тепер:</strong>
+                    {{ form.current_residents(class="form-control") }}
+                    {% for error in form.current_residents.errors %}
+                        <span class="text-danger">{{ error }}</span>
+                    {% endfor %}
+                </div>
 
-        <div class="form-group">
-            <strong>Фото:</strong>
-            {{ form.images(class="form-control-file", multiple="multiple") }}
-            {% for error in form.images.errors %}
-                <span class="text-danger">{{ error }}</span>
-            {% endfor %}
-        </div>
+                <div class="form-group">
+                    <strong>Статус житла:</strong>
+                    {{ form.is_rented(class="form-control") }}
+                    {% for error in form.is_rented.errors %}
+                        <span class="text-danger">{{ error }}</span>
+                    {% endfor %}
+                </div>
 
-        <div class="form-group">
-            {{ form.submit(class="btn btn-primary") }}
+                <div class="form-group">
+                    <strong>Фото:</strong>
+                    {{ form.images(class="form-control-file", multiple="multiple") }}
+                    {% for error in form.images.errors %}
+                        <span class="text-danger">{{ error }}</span>
+                    {% endfor %}
+                </div>
+
+                <div class="form-group">
+                    {{ form.submit(class="btn btn-primary") }}
+                </div>
+            </form>
         </div>
-    </form>
+    </div>
 </div>
 {% endblock %}
