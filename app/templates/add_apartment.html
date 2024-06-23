@@ -12,7 +12,7 @@
         {{ form.hidden_tag() }}
 
         <div class="form-group">
-            {{ form.type.label(class="form-control-label") }}
+            <strong>Тип житла: </strong>
             {{ form.type(class="form-control") }}
             {% for error in form.type.errors %}
                 <span class="text-danger">{{ error }}</span>
@@ -20,7 +20,7 @@
         </div>
 
         <div class="form-group">
-            {{ form.city.label(class="form-control-label") }}
+            <strong>Місто: </strong>
             {{ form.city(class="form-control") }}
             {% for error in form.city.errors %}
                 <span class="text-danger">{{ error }}</span>
@@ -28,7 +28,7 @@
         </div>
 
         <div class="form-group">
-            {{ form.street.label(class="form-control-label") }}
+            <strong>Вулиця:</strong>
             {{ form.street(class="form-control") }}
             {% for error in form.street.errors %}
                 <span class="text-danger">{{ error }}</span>
@@ -36,7 +36,7 @@
         </div>
 
         <div class="form-group">
-            {{ form.house_num.label(class="form-control-label") }}
+            <strong>Номер будинку:</strong>
             {{ form.house_num(class="form-control") }}
             {% for error in form.house_num.errors %}
                 <span class="text-danger">{{ error }}</span>
@@ -44,7 +44,7 @@
         </div>
 
         <div class="form-group">
-            {{ form.flat_num.label(class="form-control-label") }}
+            <strong>Номер квартири (за наявності):</strong>
             {{ form.flat_num(class="form-control") }}
             {% for error in form.flat_num.errors %}
                 <span class="text-danger">{{ error }}</span>
@@ -52,7 +52,7 @@
         </div>
 
         <div class="form-group">
-            {{ form.price.label(class="form-control-label") }}
+            <strong>Ціна:</strong>
             {{ form.price(class="form-control") }}
             {% for error in form.price.errors %}
                 <span class="text-danger">{{ error }}</span>
@@ -60,7 +60,7 @@
         </div>
 
         <div class="form-group">
-            {{ form.room_count.label(class="form-control-label") }}
+            <strong>Кількість кімнат:</strong>
             {{ form.room_count(class="form-control") }}
             {% for error in form.room_count.errors %}
                 <span class="text-danger">{{ error }}</span>
@@ -68,7 +68,7 @@
         </div>
 
         <div class="form-group">
-            {{ form.description.label(class="form-control-label") }}
+            <strong>Опис:</strong>
             {{ form.description(class="form-control") }}
             {% for error in form.description.errors %}
                 <span class="text-danger">{{ error }}</span>
@@ -76,7 +76,7 @@
         </div>
 
         <div class="form-group">
-            {{ form.comfort.label(class="form-control-label") }}
+            <strong>Комфорт:</strong>
             {{ form.comfort(class="form-control") }}
             {% for error in form.comfort.errors %}
                 <span class="text-danger">{{ error }}</span>
@@ -84,7 +84,7 @@
         </div>
 
         <div class="form-group">
-            {{ form.infrastructure.label(class="form-control-label") }}
+            <strong>Інфраструктура:</strong>
             {{ form.infrastructure(class="form-control") }}
             {% for error in form.infrastructure.errors %}
                 <span class="text-danger">{{ error }}</span>
@@ -92,7 +92,7 @@
         </div>
 
         <div class="form-group">
-            {{ form.renovation.label(class="form-control-label") }}
+            <strong>Ремонт:</strong>
             {{ form.renovation(class="form-control") }}
             {% for error in form.renovation.errors %}
                 <span class="text-danger">{{ error }}</span>
@@ -100,7 +100,7 @@
         </div>
 
         <div class="form-group">
-            {{ form.appliances.label(class="form-control-label") }}
+            <strong>Побутова техніка:</strong>
             {{ form.appliances(class="form-control") }}
             {% for error in form.appliances.errors %}
                 <span class="text-danger">{{ error }}</span>
@@ -108,7 +108,7 @@
         </div>
 
         <div class="form-group">
-            {{ form.max_residents.label(class="form-control-label") }}
+            <strong>Максимальна кількість жителів:</strong>
             {{ form.max_residents(class="form-control") }}
             {% for error in form.max_residents.errors %}
                 <span class="text-danger">{{ error }}</span>
@@ -116,7 +116,7 @@
         </div>
 
         <div class="form-group">
-            {{ form.current_residents.label(class="form-control-label") }}
+            <strong>Проживає тепер:</strong>
             {{ form.current_residents(class="form-control") }}
             {% for error in form.current_residents.errors %}
                 <span class="text-danger">{{ error }}</span>
@@ -124,7 +124,7 @@
         </div>
 
         <div class="form-group">
-            {{ form.is_rented.label(class="form-control-label") }}
+            <strong>Статус житла:</strong>
             {{ form.is_rented(class="form-control") }}
             {% for error in form.is_rented.errors %}
                 <span class="text-danger">{{ error }}</span>
@@ -132,7 +132,7 @@
         </div>
 
         <div class="form-group">
-            {{ form.images.label(class="form-control-label") }}
+            <strong>Фото:</strong>
             {{ form.images(class="form-control-file", multiple="multiple") }}
             {% for error in form.images.errors %}
                 <span class="text-danger">{{ error }}</span>

@@ -1,0 +1,36 @@
+{% block content %}
+<div class="container">
+    <h1>Мої оголошення</h1>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Тип житла</th>
+                <th>Місто</th>
+                <th>Вулиця</th>
+                <th>Ціна</th>
+                <th>Фото</th>
+                <th>Дії</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for apartment in apartments %}
+            <tr>
+                <td>{{ apartment.Type }}</td>
+                <td>{{ apartment.City }}</td>
+                <td>{{ apartment.Street }}</td>
+                <td>{{ apartment.Price }}</td>
+                <td>
+                    {% for image in apartment.apartment_images %}
+                    <img src="{{ url_for('static', filename='apartment_pic/' + image.ImageURL) }}" alt="Apartment Image" style="width: 100px; height: auto;">
+                    {% endfor %}
+                </td>
+                <td>
+                    <a href="{{ url_for('apartment.view_apartment', apartment_id=apartment.ApartmentId) }}" class="btn btn-info">Переглянути</a>
+                    <a href="{{ url_for('apartment.edit_apartment', apartment_id=apartment.ApartmentId) }}" class="btn btn-warning">Змінити</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

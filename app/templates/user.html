@@ -1,10 +1,10 @@
 {% block content %}
-  <h1>User Profile: {{ user.Name }}</h1>
+  <h1>Профіль користувача: {{ user.Name }}</h1>
 
   <div>
-    <p>Email: {{ user.Email }}</p>
-    <p>Phone Number: {{ user.PhoneNumber or 'Not provided' }}</p>
-    <p>User Type: {{ user.UserType }}</p>
+    <p>Електронна пошта: {{ user.Email }}</p>
+    <p>Номер телефону: {{ user.PhoneNumber or 'Not provided' }}</p>
+    <p>Тип користувача: {{ user.UserType }}</p>
 
     {% if user.UserImage %}
       <img src="{{ url_for('static', filename='profile_pic/' + user.UserImage) }}" alt="Profile Image" class="profile-image">
@@ -12,60 +12,61 @@
       <p>No profile image available.</p>
     {% endif %}
 
-      <h2>Published Apartments</h2>
+      <h2>Оголошення користувача</h2>
     {% if user.apartments|length > 0 %}
       <ul>
         {% for apartment in user.apartments %}
           <li>
-            <h3>{{ apartment.Description }}</h3>
-            <p>Apartment in {{ apartment.City }}, {{ apartment.Street }} {{ apartment.HouseNum }}</p>
-            <p>Type: {{ apartment.Type }}</p>
-            <p>Price: {{ apartment.Price }}</p>
-            <p>Status: {{ apartment.IsRented }}</p>
-            <p>Creation Date: {{ apartment.CreationDate.strftime('%Y-%m-%d %H:%M:%S') }}</p>
-            <p>Last Updated: {{ apartment.LastUpdated.strftime('%Y-%m-%d %H:%M:%S') }}</p>
-            <p>Favorite Count: {{ apartment.FavoriteCount }}</p>
+            <h1>{{ apartment.Type }} в місті {{ apartment.City }}, на вулиці {{ apartment.Street }}</h1>
+            <p>Місто: {{ apartment.City }}</p>
+            <p>Вулиця: {{ apartment.Street }}</p>
+            <p>Номер будинку: {{ apartment.HouseNum }}</p>
+            <p>Ціна: {{ apartment.Price }}</p>
+            <p>Статус: {{ apartment.IsRented }}</p>
+            <p>Дата створення: {{ apartment.CreationDate.strftime('%Y-%m-%d %H:%M:%S') }}</p>
+            <p>Дата останнього оновлення: {{ apartment.LastUpdated.strftime('%Y-%m-%d %H:%M:%S') }}</p>
+            <p>Число збережених: {{ apartment.FavoriteCount }}</p>
             {% if apartment.apartment_images|length > 0 %}
               <img src="{{ url_for('static', filename='apartment_pic/' + apartment.apartment_images[0].ImageURL) }}" alt="Apartment Image" class="apartment-image">
             {% else %}
-              <p>No images available.</p>
+              <p>Фото відсутні</p>
             {% endif %}
           </li>
         {% endfor %}
       </ul>
     {% else %}
-      <p>No apartments published yet.</p>
+      <p>Оголошення відсутні</p>
     {% endif %}
 
-    <h2>Comments</h2>
+    <h2>Коментарі</h2>
     {% if user.comments_received|length > 0 %}
       <ul>
         {% for comment in user.comments_received %}
           <li>
-            <p>From: {{ comment.author.Name }}</p>
+            <p>Від: {{ comment.author.Name }}</p>
             <p>{{ comment.Content }}</p>
-            <p>Rating: {{ comment.Rating }}</p>
-            <p>Posted on: {{ comment.DateAdded.strftime('%Y-%m-%d %H:%M:%S') }}</p>
+            <p>Оцінка: {{ comment.Rating }}</p>
+            <p>Викладено: {{ comment.DateAdded.strftime('%Y-%m-%d %H:%M:%S') }}</p>
           </li>
         {% endfor %}
       </ul>
     {% else %}
-      <p>No comments yet.</p>
+      <p>Коментарі відсутні</p>
     {% endif %}
 
     {% if current_user.is_authenticated %}
-      <h2>Add Comment</h2>
+      <h2>Додати коментар</h2>
       <form method="POST" action="{{ url_for('main.user_comments', user_id=user.UserID) }}">
         {{ comment_form.hidden_tag() }}
         <div class="form-group">
-          {{ comment_form.Content.label(class="form-control-label") }}
+          <p>Коментар:</p>
           {{ comment_form.Content(class="form-control", rows="3") }}
         </div>
         <div class="form-group">
-          {{ comment_form.Rating.label(class="form-control-label") }}
+          <p>Оцінка:</p>
           {{ comment_form.Rating(class="form-control") }}
         </div>
-        <button type="submit" class="btn btn-primary">Submit</button>
+        <button type="submit" class="btn btn-primary">Підтвердити</button>
       </form>
     {% else %}
       <p>Please <a href="{{ url_for('login') }}">log in</a> to leave a comment.</p>

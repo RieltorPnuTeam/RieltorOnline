@@ -1,5 +1,5 @@
 {% block content %}
-<h2>Login</h2>
+<h2>Вхід</h2>
         {% with messages = get_flashed_messages(with_categories=true) %}
             {% if messages %}
                 {% for category, message in messages %}
@@ -11,17 +11,17 @@
         <form method="POST" action="{{ url_for('main.login') }}">
             {{ form.hidden_tag() }}
             <div class="form-group">
-                {{ form.email.label }}<br>
+                <strong>Електронна пошта: </strong><br>
                 {{ form.email(size=32) }}
             </div>
             <div class="form-group">
-                {{ form.password.label }}<br>
+                <strong>Пароль: </strong><br>
                 {{ form.password(size=32) }}
             </div>
             <div class="form-group">
                 {{ form.submit(class="btn btn-primary") }}
             </div>
         </form>
-        <p>Don't have an account? <a href="{{ url_for('main.register') }}">Register here</a>.</p>
+        <p>Не маєте акаунту? <a href="{{ url_for('main.register') }}">Зареєструватись</a>.</p>
 
 {% endblock %}

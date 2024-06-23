@@ -2,11 +2,11 @@
 
 import uuid
 
-from flask import Blueprint, render_template, redirect, url_for, flash, request, abort, current_app
+from flask import Blueprint, render_template, redirect, url_for, flash, request, abort, current_app, session
 from flask_login import login_required, current_user
 from app import db, app
 from app.forms import ApartmentForm, EditApartmentForm, ApartmentCommentForm, AddRoommateForm
-from app.models import Apartment, ApartmentImage, User, ApartmentComment, Roommate
+from app.models import Apartment, ApartmentImage, User, ApartmentComment, Roommate, Favorite
 import os
 from werkzeug.utils import secure_filename
 
@@ -39,6 +39,13 @@ def view_apartment(apartment_id):
     roommates = Roommate.query.filter_by(ApartmentID=apartment_id).all()
     return render_template('apartment.html', apartment=apartment, owner=owner, comment_form=comment_form,
                            comments=comments, roommates=roommates)
+
+
+@apartment_bp.route('/my_apartments', methods=['GET'])
+@login_required
+def my_apartments():
+    user_apartments = Apartment.query.filter_by(OwnerId=current_user.UserID).all()
+    return render_template('my_apartments.html', apartments=user_apartments)
 
 
 @apartment_bp.route('/apartment/<int:apartment_id>/like', methods=['POST'])
@@ -227,18 +234,20 @@ def delete_apartment(apartment_id):
     if apartment.OwnerId != current_user.UserID:
         abort(403)
     try:
-        for image in apartment.apartment_images:
+        for image in apartment.images:
             image_path = os.path.join(current_app.root_path, 'static/apartment_pic', image.ImageURL)
             if os.path.exists(image_path):
                 os.remove(image_path)
             db.session.delete(image)
+        ApartmentComment.query.filter_by(ApartmentID=apartment_id).delete()
+        Roommate.query.filter_by(ApartmentID=apartment_id).delete()
+        Favorite.query.filter_by(ApartmentID=apartment_id).delete()
         db.session.delete(apartment)
         db.session.commit()
         flash('Apartment has been deleted!', 'success')
     except Exception as e:
         db.session.rollback()
         flash(f'Error deleting apartment: {e}', 'danger')
-
     return redirect(url_for('main.index'))
 
 

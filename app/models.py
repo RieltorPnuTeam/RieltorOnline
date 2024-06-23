@@ -30,6 +30,7 @@ class User(UserMixin, db.Model):
                                        backref=db.backref('liked_by_users', lazy='dynamic'))
 
     apartments = db.relationship('Apartment', backref='owner', lazy=True)
+    roommates = db.relationship('Roommate', back_populates='user', cascade='all, delete-orphan')
 
     def __init__(self, Email, Password, IsStudent, Name, UserType, PhoneNumber=None, UserImage=None):
         self.Email = Email
@@ -95,6 +96,7 @@ class Apartment(db.Model):
 
     images = db.relationship('ApartmentImage', back_populates='apartment',
                              overlaps="images,images_apartment")
+    roommates = db.relationship('Roommate', back_populates='apartment', cascade='all, delete-orphan')
 
 
 class ApartmentImage(db.Model):
@@ -153,5 +155,8 @@ class Roommate(db.Model):
     UserID = db.Column(db.Integer, db.ForeignKey('users.UserID'), nullable=False)
     ApartmentID = db.Column(db.Integer, db.ForeignKey('apartments.ApartmentId'), nullable=False)
 
-    User = db.relationship('User', backref=db.backref('roommates', cascade='all, delete-orphan'))
-    Apartment = db.relationship('Apartment', backref=db.backref('roommates', cascade='all, delete-orphan'))
+    user = db.relationship('User', back_populates='roommates')
+    apartment = db.relationship('Apartment', back_populates='roommates')
+
+    def __repr__(self):
+        return f"Roommate('{self.user_id}', '{self.apartment_id}')"

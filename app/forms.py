@@ -109,23 +109,6 @@ class EditApartmentForm(FlaskForm):
     images = MultipleFileField('Images')
     submit = SubmitField('Submit')
 
-    '''def populate_obj(self, apartment):
-        apartment.type = self.type.data
-        apartment.city = self.city.data
-        apartment.street = self.street.data
-        apartment.house_num = self.house_num.data
-        apartment.flat_num = self.flat_num.data
-        apartment.price = self.price.data
-        apartment.room_count = self.room_count.data
-        apartment.description = self.description.data
-        apartment.comfort = self.comfort.data
-        apartment.infrastructure = self.infrastructure.data
-        apartment.renovation = self.renovation.data
-        apartment.appliances = self.appliances.data
-        apartment.max_residents = self.max_residents.data
-        apartment.current_residents = self.current_residents.data
-        apartment.is_rented = self.is_rented.data'''
-
 
 class CommentForm(FlaskForm):
     Content = TextAreaField('Comment', validators=[DataRequired()])

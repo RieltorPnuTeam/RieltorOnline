@@ -1,6 +1,6 @@
 {% block content %}
 <div class="container">
-    <h1>Edit Profile</h1>
+    <h1>Ваш профіль</h1>
     {% with messages = get_flashed_messages(with_categories=true) %}
     {% if messages %}
     {% for category, message in messages %}
@@ -8,31 +8,6 @@
     {% endfor %}
     {% endif %}
     {% endwith %}
-    <form method="POST" action="{{ url_for('main.profile') }}" enctype="multipart/form-data">
-        {{ form.hidden_tag() }}
-        <div class="form-group">
-            {{ form.name.label }} {{ form.name(class="form-control") }}
-        </div>
-        <div class="form-group">
-            {{ form.phone_number.label }} {{ form.phone_number(class="form-control") }}
-        </div>
-        <div class="form-group">
-            {{ form.user_type.label }} {{ form.user_type(class="form-control") }}
-        </div>
-        <div class="form-group">
-            {{ form.password.label }} {{ form.password(class="form-control") }}
-        </div>
-        <div class="form-group">
-            {{ form.confirm_password.label }} {{ form.confirm_password(class="form-control") }}
-        </div>
-        <div class="form-group">
-            {{ form.profile_image.label }} {{ form.profile_image(class="form-control-file") }}
-        </div>
-
-        <button type="submit" class="btn btn-primary">Save Changes</button>
-    </form>
-
-    <hr>
 
     <div class="row">
         <div class="col-md-4">
@@ -46,32 +21,68 @@
         </div>
         <div class="col-md-8">
             <h3>{{ current_user.Name }}</h3>
-            <p>Phone Number: {{ current_user.PhoneNumber }}</p>
-            <p>Email: {{ current_user.Email }}</p>
-            <p>User Type: {{ current_user.UserType }}</p>
-            <p>Is Student: {{ current_user.IsStudent }}</p>
+            <p>Номер телефону: {{ current_user.PhoneNumber }}</p>
+            <p>Електронна пошта: {{ current_user.Email }}</p>
+            <p>Тип користувача: {{ current_user.UserType }}</p>
+            <p>Статус студента: {{ current_user.IsStudent }}</p>
         </div>
     </div>
 
     <hr>
+    <h3>Редагування профілю</h3>
+    <div class="registration-rules">
+        <ul>
+            <li>Ім'я має складатися з двох слів, кожне з яких починається з великої літери (наприклад, Микола Мельник).
+            </li>
+            <li>Номер телефону має бути вірним, починатися зі знаку "+" і містити 12 цифр (наприклад, +380123456789).
+            </li>
+            <li>Пароль має включати як букви, так і цифри.</li>
+        </ul>
+    </div>
 
-    <h2>Comments</h2>
+    <form method="POST" action="{{ url_for('main.profile') }}" enctype="multipart/form-data">
+        {{ form.hidden_tag() }}
+        <div class="form-group">
+            <p>Ім'я: </p> {{ form.name(class="form-control") }}
+        </div>
+        <div class="form-group">
+            <p>Номер телефону: </p> {{ form.phone_number(class="form-control") }}
+        </div>
+        <div class="form-group">
+            <p>Тип користувача: </p> {{ form.user_type(class="form-control") }}
+        </div>
+        <div class="form-group">
+            <p>Новий пароль: </p> {{ form.password(class="form-control") }}
+        </div>
+        <div class="form-group">
+            <p>Підтвердження паролю: </p> {{ form.confirm_password(class="form-control") }}
+        </div>
+        <div class="form-group">
+            <p>Фото профілю: </p> {{ form.profile_image(class="form-control-file") }}
+        </div>
+        <br>
+        <button type="submit" class="btn btn-primary">Зберегти зміни</button>
+    </form>
+
+    <hr>
+
+    <h2>Коментарі</h2>
     <div class="comments">
         {% for comment in comments_received %}
         <div class="comment">
             <p>{{ comment.Content }}</p>
-            <p>Rating: {{ comment.Rating }}</p>
-            <p>Posted by: {{ comment.author.Name }}</p>
-            <p>Date: {{ comment.DateAdded }}</p>
+            <p>Оцінка: {{ comment.Rating }}</p>
+            <p>Ім'я: {{ comment.author.Name }}</p>
+            <p>Викладено: {{ comment.DateAdded }}</p>
         </div>
         {% else %}
-        <p>No comments yet.</p>
+        <p>Коментарі відсутні</p>
         {% endfor %}
     </div>
 
     <hr>
 
-    <h2>Liked Apartments</h2>
+    <h2>Збережені</h2>
     <div class="liked-apartments">
         <div class="row">
             {% for apartment in liked_apartments %}
@@ -80,17 +91,18 @@
                     <img src="{{ url_for('static', filename='apartment_pic/' + apartment.images[0].ImageURL) }}"
                          class="card-img-top" alt="Apartment Image">
                     <div class="card-body">
-                        <h3>{{ apartment.Description }}</h3>
-                        <p class="card-title">{{ apartment.Type }} in {{ apartment.City }}</>
-                        <p class="card-text">Price: {{ apartment.Price }}</p>
-                        <p class="card-text">Room Count: {{ apartment.RoomCount }}</p>
-                        <a href="#" class="btn btn-primary">View Details</a>
+                        <h3>{{ apartment.Type }} в місті {{ apartment.City }}, на вулиці {{ apartment.Street }}</h3>
+                        <p class="card-text">Ціна: {{ apartment.Price }}</p>
+                        <p class="card-text">Кількість кімнат: {{ apartment.RoomCount }}</p>
+                        <p class="card-text">Статус житла: {{ apartment.IsRented }}</p>
+                        <a href="{{ url_for('apartment.view_apartment', apartment_id=apartment.ApartmentId) }}"
+                           class="btn btn-primary">Переглянути</a>
                     </div>
                 </div>
             </div>
             <br><br><br>
             {% else %}
-            <p>No liked apartments yet.</p>
+            <p>Збережені відсутні</p>
             {% endfor %}
         </div>
     </div>
