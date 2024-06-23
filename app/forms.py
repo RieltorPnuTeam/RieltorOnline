@@ -25,7 +25,8 @@ class RegistrationForm(FlaskForm):
     ])
     phone_number = StringField('Phone Number', validators=[
         DataRequired(),
-        Regexp(r'^\+\d{12}$', message='Invalid phone number format. Use digits only, optionally starting with + and followed by at least 10 digits')
+        Regexp(r'^\+\d{12}$',
+               message='Invalid phone number format. Use digits only, optionally starting with + and followed by at least 10 digits')
     ])
     user_type = SelectField('User Type', choices=[('орендар', 'Орендар'), ('власник', 'Власник')],
                             validators=[DataRequired()])
@@ -46,7 +47,8 @@ class EditProfileForm(FlaskForm):
     ])
     phone_number = StringField('Phone Number', validators=[
         Optional(),
-        Regexp(r'^\+\d{12}$', message='Invalid phone number format. Use digits only, optionally starting with + and followed by at least 10 digits')
+        Regexp(r'^\+\d{12}$',
+               message='Invalid phone number format. Use digits only, optionally starting with + and followed by at least 10 digits')
     ])
     user_type = SelectField('User Type', choices=[('орендар', 'Орендар'), ('власник', 'Власник')],
                             validators=[DataRequired()])
@@ -123,3 +125,20 @@ class EditApartmentForm(FlaskForm):
         apartment.max_residents = self.max_residents.data
         apartment.current_residents = self.current_residents.data
         apartment.is_rented = self.is_rented.data'''
+
+
+class CommentForm(FlaskForm):
+    Content = TextAreaField('Comment', validators=[DataRequired()])
+    Rating = IntegerField('Rating', validators=[DataRequired(), NumberRange(min=1, max=5)])
+    submit = SubmitField('Submit')
+
+
+class ApartmentCommentForm(FlaskForm):
+    Content = TextAreaField('Comment', validators=[DataRequired()])
+    Rating = IntegerField('Rating', validators=[DataRequired(), NumberRange(min=1, max=5)])
+    Submit = SubmitField('Submit')
+
+
+class AddRoommateForm(FlaskForm):
+    email = StringField('User Email', validators=[DataRequired(), Email()])
+    submit = SubmitField('Add Roommate')

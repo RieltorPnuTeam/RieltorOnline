@@ -3,8 +3,8 @@
 from flask import Blueprint, render_template, redirect, url_for, flash, request
 from flask_login import login_user, current_user, logout_user, login_required
 from app import db, bcrypt, app
-from app.forms import RegistrationForm, LoginForm, EditProfileForm
-from app.models import User
+from app.forms import RegistrationForm, LoginForm, EditProfileForm, CommentForm
+from app.models import User, UserComment
 
 main_bp = Blueprint('main', __name__)
 
@@ -43,7 +43,6 @@ def register():
                 flash(f'Error in {getattr(form, field).label.text}: {error}', 'danger')
 
     return render_template('register.html', title='Register', form=form)
-
 
 
 @main_bp.route('/login', methods=['GET', 'POST'])
@@ -93,4 +92,24 @@ def profile():
     profile_image = url_for('static', filename=f'profile_pic/{current_user.UserImage}')
     comments_received = current_user.comments_received
 
-    return render_template('profile.html', title='Edit Profile', form=form, profile_image=profile_image, comments_received=comments_received, liked_apartments=liked_apartments)
+    return render_template('profile.html', title='Edit Profile', form=form, profile_image=profile_image,
+                           comments_received=comments_received, liked_apartments=liked_apartments)
+
+
+@main_bp.route('/user/<int:user_id>', methods=['GET', 'POST'])
+@login_required
+def user_comments(user_id):
+    user = User.query.get_or_404(user_id)
+    comment_form = CommentForm()
+    if comment_form.validate_on_submit():
+        comment = UserComment(
+            AuthorID=current_user.UserID,
+            TargetUserID=user.UserID,
+            Content=comment_form.Content.data,
+            Rating=comment_form.Rating.data
+        )
+        db.session.add(comment)
+        db.session.commit()
+        flash('Your comment has been added.', 'success')
+        return redirect(url_for('main.user_comments', user_id=user.UserID))
+    return render_template('user.html', user=user, comment_form=comment_form)

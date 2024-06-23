@@ -28,6 +28,7 @@
         <div class="form-group">
             {{ form.profile_image.label }} {{ form.profile_image(class="form-control-file") }}
         </div>
+
         <button type="submit" class="btn btn-primary">Save Changes</button>
     </form>
 
@@ -48,6 +49,7 @@
             <p>Phone Number: {{ current_user.PhoneNumber }}</p>
             <p>Email: {{ current_user.Email }}</p>
             <p>User Type: {{ current_user.UserType }}</p>
+            <p>Is Student: {{ current_user.IsStudent }}</p>
         </div>
     </div>
 
@@ -78,13 +80,15 @@
                     <img src="{{ url_for('static', filename='apartment_pic/' + apartment.images[0].ImageURL) }}"
                          class="card-img-top" alt="Apartment Image">
                     <div class="card-body">
-                        <h5 class="card-title">{{ apartment.Type }} in {{ apartment.City }}</h5>
-                        <p class="card-text">Price: ${{ apartment.Price }}</p>
+                        <h3>{{ apartment.Description }}</h3>
+                        <p class="card-title">{{ apartment.Type }} in {{ apartment.City }}</>
+                        <p class="card-text">Price: {{ apartment.Price }}</p>
                         <p class="card-text">Room Count: {{ apartment.RoomCount }}</p>
                         <a href="#" class="btn btn-primary">View Details</a>
                     </div>
                 </div>
             </div>
+            <br><br><br>
             {% else %}
             <p>No liked apartments yet.</p>
             {% endfor %}

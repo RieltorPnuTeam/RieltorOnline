@@ -1,0 +1,74 @@
+{% block content %}
+  <h1>User Profile: {{ user.Name }}</h1>
+
+  <div>
+    <p>Email: {{ user.Email }}</p>
+    <p>Phone Number: {{ user.PhoneNumber or 'Not provided' }}</p>
+    <p>User Type: {{ user.UserType }}</p>
+
+    {% if user.UserImage %}
+      <img src="{{ url_for('static', filename='profile_pic/' + user.UserImage) }}" alt="Profile Image" class="profile-image">
+    {% else %}
+      <p>No profile image available.</p>
+    {% endif %}
+
+      <h2>Published Apartments</h2>
+    {% if user.apartments|length > 0 %}
+      <ul>
+        {% for apartment in user.apartments %}
+          <li>
+            <h3>{{ apartment.Description }}</h3>
+            <p>Apartment in {{ apartment.City }}, {{ apartment.Street }} {{ apartment.HouseNum }}</p>
+            <p>Type: {{ apartment.Type }}</p>
+            <p>Price: {{ apartment.Price }}</p>
+            <p>Status: {{ apartment.IsRented }}</p>
+            <p>Creation Date: {{ apartment.CreationDate.strftime('%Y-%m-%d %H:%M:%S') }}</p>
+            <p>Last Updated: {{ apartment.LastUpdated.strftime('%Y-%m-%d %H:%M:%S') }}</p>
+            <p>Favorite Count: {{ apartment.FavoriteCount }}</p>
+            {% if apartment.apartment_images|length > 0 %}
+              <img src="{{ url_for('static', filename='apartment_pic/' + apartment.apartment_images[0].ImageURL) }}" alt="Apartment Image" class="apartment-image">
+            {% else %}
+              <p>No images available.</p>
+            {% endif %}
+          </li>
+        {% endfor %}
+      </ul>
+    {% else %}
+      <p>No apartments published yet.</p>
+    {% endif %}
+
+    <h2>Comments</h2>
+    {% if user.comments_received|length > 0 %}
+      <ul>
+        {% for comment in user.comments_received %}
+          <li>
+            <p>From: {{ comment.author.Name }}</p>
+            <p>{{ comment.Content }}</p>
+            <p>Rating: {{ comment.Rating }}</p>
+            <p>Posted on: {{ comment.DateAdded.strftime('%Y-%m-%d %H:%M:%S') }}</p>
+          </li>
+        {% endfor %}
+      </ul>
+    {% else %}
+      <p>No comments yet.</p>
+    {% endif %}
+
+    {% if current_user.is_authenticated %}
+      <h2>Add Comment</h2>
+      <form method="POST" action="{{ url_for('main.user_comments', user_id=user.UserID) }}">
+        {{ comment_form.hidden_tag() }}
+        <div class="form-group">
+          {{ comment_form.Content.label(class="form-control-label") }}
+          {{ comment_form.Content(class="form-control", rows="3") }}
+        </div>
+        <div class="form-group">
+          {{ comment_form.Rating.label(class="form-control-label") }}
+          {{ comment_form.Rating(class="form-control") }}
+        </div>
+        <button type="submit" class="btn btn-primary">Submit</button>
+      </form>
+    {% else %}
+      <p>Please <a href="{{ url_for('login') }}">log in</a> to leave a comment.</p>
+    {% endif %}
+  </div>
+{% endblock %}

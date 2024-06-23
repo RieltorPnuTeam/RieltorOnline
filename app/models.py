@@ -29,6 +29,8 @@ class User(UserMixin, db.Model):
     liked_apartments = db.relationship('Apartment', secondary='favorites',
                                        backref=db.backref('liked_by_users', lazy='dynamic'))
 
+    apartments = db.relationship('Apartment', backref='owner', lazy=True)
+
     def __init__(self, Email, Password, IsStudent, Name, UserType, PhoneNumber=None, UserImage=None):
         self.Email = Email
         self.Password = bcrypt.generate_password_hash(Password).decode('utf-8')

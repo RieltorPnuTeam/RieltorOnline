@@ -7,14 +7,14 @@
 {% endif %}
 {% endwith %}
 <div class="container">
-    <h1>{{ apartment.Type }}</h1>
+    <h1> {{ apartment.Description }}</h1>
+    <p>{{ apartment.Type }}</p>
     <p><strong>City:</strong> {{ apartment.City }}</p>
     <p><strong>Street:</strong> {{ apartment.Street }}</p>
     <p><strong>House Number:</strong> {{ apartment.HouseNum }}</p>
     <p><strong>Flat Number:</strong> {{ apartment.FlatNum }}</p>
     <p><strong>Price:</strong> {{ apartment.Price }}</p>
     <p><strong>Room Count:</strong> {{ apartment.RoomCount }}</p>
-    <p><strong>Description:</strong> {{ apartment.Description }}</p>
     <p><strong>Comfort:</strong> {{ apartment.Comfort }}</p>
     <p><strong>Infrastructure:</strong> {{ apartment.Infrastructure }}</p>
     <p><strong>Renovation:</strong> {{ apartment.Renovation }}</p>
@@ -29,11 +29,73 @@
              style="width:200px; height:auto;">
         {% endfor %}
     </div>
+    <div class="container">
+    {% if current_user.is_authenticated %}
+      {% if apartment in current_user.liked_apartments %}
+        <form method="POST" action="{{ url_for('apartment.unlike_apartment', apartment_id=apartment.ApartmentId) }}">
+          <button type="submit" class="btn btn-danger">Unlike</button>
+        </form>
+      {% else %}
+        <form method="POST" action="{{ url_for('apartment.like_apartment', apartment_id=apartment.ApartmentId) }}">
+          <button type="submit" class="btn btn-primary">Like</button>
+        </form>
+      {% endif %}
+    {% endif %}
+    <p>Favorite count: {{ apartment.FavoriteCount }}</p>
+    </div>
     <div>
         <h3>Owner Details:</h3>
         <p><strong>Owner Name:</strong> {{ owner.Name }}</p>
         <p><strong>Owner Phone Number:</strong> {{ owner.PhoneNumber }}</p>
         <p><strong>Owner Email:</strong> {{ owner.Email }}</p>
     </div>
+    <div class="container">
+    <h2>Roommates</h2>
+    {% if apartment.roommates|length > 0 %}
+      <ul>
+        {% for roommate in apartment.roommates %}
+          <li>
+            <p>Name: {{ roommate.User.Name }}</p>
+            <p>Email: {{ roommate.User.Email }}</p>
+          </li>
+        {% endfor %}
+      </ul>
+    {% else %}
+      <p>No roommates yet.</p>
+    {% endif %}
+</div>
+    <h2>Comments</h2>
+    {% if comments|length > 0 %}
+    <ul>
+        {% for comment in comments %}
+        <li>
+            <p>From: {{ comment.user.Name }}</p>
+            <p>{{ comment.Content }}</p>
+            <p>Rating: {{ comment.Rating }}</p>
+            <p>Posted on: {{ comment.DateAdded.strftime('%Y-%m-%d %H:%M:%S') }}</p>
+        </li>
+        {% endfor %}
+    </ul>
+    {% else %}
+    <p>No comments yet.</p>
+    {% endif %}
+
+    {% if current_user.is_authenticated %}
+    <h2>Add Comment</h2>
+    <form method="POST" action="{{ url_for('apartment.view_apartment', apartment_id=apartment.ApartmentId) }}">
+        {{ comment_form.hidden_tag() }}
+        <div class="form-group">
+            {{ comment_form.Content.label(class="form-control-label") }}
+            {{ comment_form.Content(class="form-control", rows="3") }}
+        </div>
+        <div class="form-group">
+            {{ comment_form.Rating.label(class="form-control-label") }}
+            {{ comment_form.Rating(class="form-control") }}
+        </div>
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+    {% else %}
+    <p>Please <a href="{{ url_for('users.login') }}">log in</a> to leave a comment.</p>
+    {% endif %}
 </div>
 {% endblock %}

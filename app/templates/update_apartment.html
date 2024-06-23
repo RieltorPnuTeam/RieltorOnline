@@ -8,14 +8,15 @@
     {% endfor %}
     {% endif %}
     {% endwith %}
-    <form method="POST" action="{{ url_for('apartment.edit_apartment', apartment_id=apartment.ApartmentId) }}" enctype="multipart/form-data">
+    <form method="POST" action="{{ url_for('apartment.edit_apartment', apartment_id=apartment.ApartmentId) }}"
+          enctype="multipart/form-data">
         {{ form.hidden_tag() }}
 
         <div class="form-group">
             {{ form.type.label(class="form-control-label") }}
             {{ form.type(class="form-control") }}
             {% for error in form.type.errors %}
-                <span class="text-danger">{{ error }}</span>
+            <span class="text-danger">{{ error }}</span>
             {% endfor %}
         </div>
 
@@ -23,7 +24,7 @@
             {{ form.city.label(class="form-control-label") }}
             {{ form.city(class="form-control") }}
             {% for error in form.city.errors %}
-                <span class="text-danger">{{ error }}</span>
+            <span class="text-danger">{{ error }}</span>
             {% endfor %}
         </div>
 
@@ -31,7 +32,7 @@
             {{ form.street.label(class="form-control-label") }}
             {{ form.street(class="form-control") }}
             {% for error in form.street.errors %}
-                <span class="text-danger">{{ error }}</span>
+            <span class="text-danger">{{ error }}</span>
             {% endfor %}
         </div>
 
@@ -39,7 +40,7 @@
             {{ form.house_num.label(class="form-control-label") }}
             {{ form.house_num(class="form-control") }}
             {% for error in form.house_num.errors %}
-                <span class="text-danger">{{ error }}</span>
+            <span class="text-danger">{{ error }}</span>
             {% endfor %}
         </div>
 
@@ -47,7 +48,7 @@
             {{ form.flat_num.label(class="form-control-label") }}
             {{ form.flat_num(class="form-control") }}
             {% for error in form.flat_num.errors %}
-                <span class="text-danger">{{ error }}</span>
+            <span class="text-danger">{{ error }}</span>
             {% endfor %}
         </div>
 
@@ -55,7 +56,7 @@
             {{ form.price.label(class="form-control-label") }}
             {{ form.price(class="form-control") }}
             {% for error in form.price.errors %}
-                <span class="text-danger">{{ error }}</span>
+            <span class="text-danger">{{ error }}</span>
             {% endfor %}
         </div>
 
@@ -63,7 +64,7 @@
             {{ form.room_count.label(class="form-control-label") }}
             {{ form.room_count(class="form-control") }}
             {% for error in form.room_count.errors %}
-                <span class="text-danger">{{ error }}</span>
+            <span class="text-danger">{{ error }}</span>
             {% endfor %}
         </div>
 
@@ -71,7 +72,7 @@
             {{ form.description.label(class="form-control-label") }}
             {{ form.description(class="form-control") }}
             {% for error in form.description.errors %}
-                <span class="text-danger">{{ error }}</span>
+            <span class="text-danger">{{ error }}</span>
             {% endfor %}
         </div>
 
@@ -79,7 +80,7 @@
             {{ form.comfort.label(class="form-control-label") }}
             {{ form.comfort(class="form-control") }}
             {% for error in form.comfort.errors %}
-                <span class="text-danger">{{ error }}</span>
+            <span class="text-danger">{{ error }}</span>
             {% endfor %}
         </div>
 
@@ -87,7 +88,7 @@
             {{ form.infrastructure.label(class="form-control-label") }}
             {{ form.infrastructure(class="form-control") }}
             {% for error in form.infrastructure.errors %}
-                <span class="text-danger">{{ error }}</span>
+            <span class="text-danger">{{ error }}</span>
             {% endfor %}
         </div>
 
@@ -95,7 +96,7 @@
             {{ form.renovation.label(class="form-control-label") }}
             {{ form.renovation(class="form-control") }}
             {% for error in form.renovation.errors %}
-                <span class="text-danger">{{ error }}</span>
+            <span class="text-danger">{{ error }}</span>
             {% endfor %}
         </div>
 
@@ -103,7 +104,7 @@
             {{ form.appliances.label(class="form-control-label") }}
             {{ form.appliances(class="form-control") }}
             {% for error in form.appliances.errors %}
-                <span class="text-danger">{{ error }}</span>
+            <span class="text-danger">{{ error }}</span>
             {% endfor %}
         </div>
 
@@ -111,7 +112,7 @@
             {{ form.max_residents.label(class="form-control-label") }}
             {{ form.max_residents(class="form-control") }}
             {% for error in form.max_residents.errors %}
-                <span class="text-danger">{{ error }}</span>
+            <span class="text-danger">{{ error }}</span>
             {% endfor %}
         </div>
 
@@ -119,7 +120,7 @@
             {{ form.current_residents.label(class="form-control-label") }}
             {{ form.current_residents(class="form-control") }}
             {% for error in form.current_residents.errors %}
-                <span class="text-danger">{{ error }}</span>
+            <span class="text-danger">{{ error }}</span>
             {% endfor %}
         </div>
 
@@ -127,7 +128,7 @@
             {{ form.is_rented.label(class="form-control-label") }}
             {{ form.is_rented(class="form-control") }}
             {% for error in form.is_rented.errors %}
-                <span class="text-danger">{{ error }}</span>
+            <span class="text-danger">{{ error }}</span>
             {% endfor %}
         </div>
 
@@ -136,7 +137,8 @@
             <ul>
                 {% for image in apartment.apartment_images %}
                 <li>
-                    <img src="{{ url_for('static', filename='apartment_pic/' + image.ImageURL.split('/')[-1]) }}" alt="Apartment Image" style="width: 100px;">
+                    <img src="{{ url_for('static', filename='apartment_pic/' + image.ImageURL.split('/')[-1]) }}"
+                         alt="Apartment Image" style="width: 100px;">
                     <input type="checkbox" name="deleted_images" value="{{ image.ImageID }}"> Delete
                 </li>
                 {% endfor %}
@@ -147,17 +149,54 @@
             {{ form.images.label(class="form-control-label") }}
             {{ form.images(class="form-control-file", multiple="multiple") }}
             {% for error in form.images.errors %}
-                <span class="text-danger">{{ error }}</span>
+            <span class="text-danger">{{ error }}</span>
             {% endfor %}
             <small class="form-text text-muted">Upload additional images (optional).</small>
         </div>
 
-        <button type="submit" class="btn btn-primary">Update</button>
+        <button type="submit" name="submit" class="btn btn-primary">Update</button>
     </form>
 
     <form method="POST" action="{{ url_for('apartment.delete_apartment', apartment_id=apartment.ApartmentId) }}">
         {{ form.csrf_token }}
         <button type="submit" class="btn btn-danger">Delete Apartment</button>
     </form>
+
+    <div class="container">
+        <h2>Roommates</h2>
+        {% if apartment.roommates|length > 0 %}
+        <ul>
+            {% for roommate in apartment.roommates %}
+            <li>
+                <p>Name: {{ roommate.User.Name }}</p>
+                <p>Email: {{ roommate.User.Email }}</p>
+                <form method="POST"
+                      action="{{ url_for('apartment.delete_roommate', apartment_id=apartment.ApartmentId, roommate_id=roommate.RoommateID) }}"
+                      style="display: inline;">
+                    {{ form.csrf_token }}
+                    <button type="submit" class="btn btn-danger">Remove</button>
+                </form>
+            </li>
+            {% endfor %}
+        </ul>
+        {% else %}
+        <p>No roommates yet.</p>
+        {% endif %}
+    </div>
+
+    <div class="container">
+        <h3>Add Roommate</h3>
+        <form method="POST" action="{{ url_for('apartment.edit_apartment', apartment_id=apartment.ApartmentId) }}">
+            {{ add_roommate_form.hidden_tag() }}
+            <div class="form-group">
+                {{ add_roommate_form.email.label(class="form-control-label") }}
+                {{ add_roommate_form.email(class="form-control") }}
+                {% for error in add_roommate_form.email.errors %}
+                <span class="text-danger">{{ error }}</span>
+                {% endfor %}
+            </div>
+            <button type="submit" class="btn btn-primary" name="add_roommate">Add Roommate</button>
+        </form>
+    </div>
 </div>
 {% endblock %}
